@@ -5,68 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        MinHeight="450" MinWidth="500" Height="450" Width="500" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown">
-    <DockPanel x:Name="MainPanel" IsEnabled="{Binding IsLoaded, Mode=OneWay}">
+        MinHeight="450" MinWidth="500" Height="450" Width="500" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        x:Name="MainContainer">
+    <ContentControl Content="{Binding Path=CurrentVm, Mode=OneWay}">
         <interactivity:Interaction.Triggers>
             <interactivity:EventTrigger EventName="Loaded">
                 <interactivity:InvokeCommandAction Command="{Binding LoadedCbCmd}"/>
             </interactivity:EventTrigger>
         </interactivity:Interaction.Triggers>
-
-        <DockPanel Margin="15,15,15,0" DockPanel.Dock="Top">
-            <Label DockPanel.Dock="Left" Content="{Binding SelectedMonth}" ContentStringFormat="MMMM yyyy" FontWeight="Bold"></Label>
-            <DockPanel DockPanel.Dock="Right" LastChildFill="False">
-                <Button Width="50" DockPanel.Dock="Right" Content="Prev" Command="{Binding PrevMonthCmd}"></Button>
-                <Button Margin="0,0,2,0" Width="50" DockPanel.Dock="Right" Content="Next" Command="{Binding NextMonthCmd}"></Button>
-            </DockPanel>
-        </DockPanel>
-
-        <UniformGrid Margin="15,15,15,0" DockPanel.Dock="Top" Columns="7">
-            <Label Content="Mo" HorizontalAlignment="Center" FontWeight="Bold"></Label>
-            <Label Content="Tu" HorizontalAlignment="Center" FontWeight="Bold"></Label>
-            <Label Content="We" HorizontalAlignment="Center" FontWeight="Bold"></Label>
-            <Label Content="Th" HorizontalAlignment="Center" FontWeight="Bold"></Label>
-            <Label Content="Fr" HorizontalAlignment="Center" FontWeight="Bold"></Label>
-            <Label Content="Sa" HorizontalAlignment="Center" FontWeight="Bold"></Label>
-            <Label Content="Su" HorizontalAlignment="Center" FontWeight="Bold"></Label>
-        </UniformGrid>
-
-        <ItemsControl Margin="15,15,15,15" ItemsSource="{Binding Days}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border Margin="1" BorderThickness="2" CornerRadius="3">
-                        <Border.BorderBrush>
-                            <SolidColorBrush Color="Black" Opacity="0.3"/>
-                        </Border.BorderBrush>
-                        <Border.Resources>
-                            <Style TargetType="{x:Type Border}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsDayFromSelectedMonth}" Value="False">
-                                        <Setter Property="Opacity" Value="0.1" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsWeekend}" Value="True">
-                                        <Setter Property="Background" Value="Salmon" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsToday}" Value="True">
-                                        <Setter Property="Background" Value="Red" />
-                                    </DataTrigger>
-                                    <Trigger Property="Border.IsMouseOver" Value="True">
-                                        <Setter Property="Border.Background" Value="Gray" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Resources>
-                        <DockPanel>
-                            <Label Content="{Binding Original.Day}" ContentStringFormat="dd" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
-                        </DockPanel>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="7" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-    </DockPanel>
+    </ContentControl>
 </Window>

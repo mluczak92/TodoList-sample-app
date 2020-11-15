@@ -1,12 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Autofac;
 using Prism.Commands;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using TodoList_sample_app.Models;
 using TodoList_sample_app.Models.Database;
 
 namespace TodoList_sample_app.ViewModels {
@@ -14,148 +10,44 @@ namespace TodoList_sample_app.ViewModels {
         public event PropertyChangedEventHandler PropertyChanged;
 
         IDatabaseMigrator dbChecker;
-        IDaysRepository daysRepo;
-        IItemsRepository itemsRepo;
-        IBoundriesSelector boundriesSelector;
+        ILifetimeScope scope;
 
-        bool isLoaded;
-        DateTime selectedMonth;
-        DateTime minMonth;
-        DateTime maxMonth;
+        ITodoVm currentVm;
 
-        IEnumerable<TodoDayPresenter> days;
-        TodoDayPresenter selectedDay;
-        IEnumerable<TodoItem> items;
-        TodoItem selectedItem;
-
-        public MainVm(IDatabaseMigrator dbChecker, IDaysRepository daysRepo,
-            IItemsRepository itemsRepo, IBoundriesSelector boundriesSelector) {
+        public MainVm(IDatabaseMigrator dbChecker, ILifetimeScope scope) {
             this.dbChecker = dbChecker;
-            this.daysRepo = daysRepo;
-            this.itemsRepo = itemsRepo;
-            this.boundriesSelector = boundriesSelector;
+            this.scope = scope;
 
-            bool isLoaded = true;
-            selectedMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            minMonth = new DateTime(2000, 1, 1);
-            maxMonth = new DateTime(2049, 12, 1);
-
-            LoadedCbCmd = new DelegateCommand(LoadedCb, () => isLoaded);
-            NextMonthCmd = new DelegateCommand(
-                () => SelectedMonth = selectedMonth.AddMonths(1),
-                () => selectedMonth < maxMonth);
-            PrevMonthCmd = new DelegateCommand(
-                () => SelectedMonth = selectedMonth.AddMonths(-1),
-                () => selectedMonth > minMonth);
-            NewTaskCmd = new DelegateCommand(NewTask, () => true);
+            LoadedCbCmd = new DelegateCommand(LoadedCb, () => true);
+            GotoDayCmd = new DelegateCommand<TodoDay>(GoToDay, x => true);
+            GotoCalendarCmd = new DelegateCommand<TodoDay>(GoToCalendar, x => true);
         }
 
-        public DateTime SelectedMonth {
+        public ITodoVm CurrentVm {
             get {
-                return selectedMonth;
-            }
-            private set {
-                selectedMonth = value;
-                OnPropertyChanged();
-                RefreshDays();
-            }
-        }
-
-        public bool IsLoaded {
-            get {
-                return isLoaded;
-            }
-            private set {
-                isLoaded = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public IEnumerable<TodoDayPresenter> Days {
-            get {
-                return days;
-            }
-            private set {
-                days = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public TodoDayPresenter SelectedDay {
-            get {
-                return selectedDay;
+                return currentVm;
             }
             set {
-                selectedDay = value;
-                OnPropertyChanged();
-                RefreshItems();
-            }
-        }
-
-        public IEnumerable<TodoItem> Items {
-            get {
-                return items;
-            }
-            private set {
-                items = value?.OrderBy(x => x.Time)
-                    .ThenBy(x => x.Id); //create time
-                OnPropertyChanged();
-            }
-        }
-
-        public TodoItem SelectedItem {
-            get {
-                return selectedItem;
-            }
-            set {
-                selectedItem = value;
+                currentVm = value;
                 OnPropertyChanged();
             }
         }
 
         public ICommand LoadedCbCmd { get; }
-        public ICommand NextMonthCmd { get; }
-        public ICommand PrevMonthCmd { get; }
-        public ICommand NewTaskCmd { get; }
+        public ICommand GotoDayCmd { get; }
+        public ICommand GotoCalendarCmd { get; }
 
         async void LoadedCb() {
-            try {
-                IsLoaded = false;
-                await dbChecker.EnsureMigrated();
-                RefreshDays();
-            } finally {
-                IsLoaded = true;
-            }
+            await dbChecker.EnsureMigrated();
+            CurrentVm = scope.Resolve<ICalendarVm>();
         }
 
-        void RefreshDays() {
-            boundriesSelector.Select(selectedMonth.Year, selectedMonth.Month,
-                out DateTime min, out DateTime max);
-            Days = daysRepo.Days.Include(x => x.Items)
-                .Where(x => x.Day.Date >= min &&
-                    x.Day.Date <= max)
-                .OrderBy(x => x.Day)
-                .ToList()
-                .Select(x => new TodoDayPresenter(selectedMonth.Month, x));
-            SelectedDay = days.FirstOrDefault();
+        void GoToDay(TodoDay day) {
+            CurrentVm = scope.Resolve<IDayVm>(new TypedParameter(typeof(TodoDay), day));
         }
 
-        async void NewTask() {
-            TodoItem newItem = new TodoItem() {
-                Day = selectedDay.Original,
-                Time = DateTime.Now.TimeOfDay,
-                Note = "New task",
-            };
-            await itemsRepo.Add(newItem);
-            RefreshItems(newItem);
-        }
-
-        void RefreshItems(TodoItem item = null) {
-            Items = selectedDay?.Original.Items;
-            if (item == null)
-                SelectedItem = items?.FirstOrDefault();
-            else
-                SelectedItem = item;
+        void GoToCalendar(TodoDay day) {
+            CurrentVm = scope.Resolve<ICalendarVm>(new TypedParameter(typeof(TodoDay), day));
         }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null) {

@@ -30,7 +30,9 @@ namespace TodoList_sample_app {
 
         void RegisterServices() {
             ContainerBuilder builder = new ContainerBuilder();
-            builder.RegisterType<MainVm>().As<IMainVm>();
+            builder.RegisterType<MainVm>()
+                .As<IMainVm>()
+                .SingleInstance();
             builder.RegisterType<TodoContext>()
                 .WithParameter(new TypedParameter(typeof(string), conString))
                 .AsSelf();
@@ -39,6 +41,8 @@ namespace TodoList_sample_app {
             builder.RegisterType<EFDaysRepository>().As<IDaysRepository>();
             builder.RegisterType<EFItemsRepository>().As<IItemsRepository>();
             builder.RegisterType<CalendarLikeBoundriesSelector>().As<IBoundriesSelector>();
+            builder.RegisterType<CalendarVm>().As<ICalendarVm>();
+            builder.RegisterType<DayVm>().As<IDayVm>();
 
             container = builder.Build();
         }
