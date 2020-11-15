@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        MinHeight="500" MinWidth="500" Height="500" Width="500" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        MinHeight="450" MinWidth="500" Height="450" Width="500" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <DockPanel x:Name="MainPanel" IsEnabled="{Binding IsLoaded, Mode=OneWay}">
         <interactivity:Interaction.Triggers>
             <interactivity:EventTrigger EventName="Loaded">
@@ -34,12 +34,15 @@
         <ItemsControl Margin="15,15,15,15" ItemsSource="{Binding Days}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border Margin="1" BorderThickness="1" BorderBrush="Black" CornerRadius="3">
+                    <Border Margin="1" BorderThickness="2" CornerRadius="3">
+                        <Border.BorderBrush>
+                            <SolidColorBrush Color="Black" Opacity="0.3"/>
+                        </Border.BorderBrush>
                         <Border.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsDayFromSelectedMonth}" Value="False">
-                                        <Setter Property="Opacity" Value="0.25" />
+                                        <Setter Property="Opacity" Value="0.1" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding IsWeekend}" Value="True">
                                         <Setter Property="Background" Value="Salmon" />
