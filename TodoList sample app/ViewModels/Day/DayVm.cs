@@ -56,7 +56,7 @@ namespace TodoList_sample_app.ViewModels {
             TodoItem newItem = new TodoItem() {
                 DayId = day.Id,
                 Time = TimeSpan.FromMinutes((int)DateTime.Now.TimeOfDay.TotalMinutes),
-                Note = "",
+                Note = "new task",
             };
             await itemsRepo.Add(newItem);
             scope.Resolve<IMainVm>().GoToItem(newItem);

@@ -47,7 +47,7 @@
                             </Grid.Resources>
                             <TextBlock></TextBlock>
                             <TextBlock Margin="3,3,0,0" Text="{Binding Time, StringFormat=\{0:h\\:mm\}}" VerticalAlignment="Top" HorizontalAlignment="Left"></TextBlock>
-                            <TextBlock Margin="3,20,3,20" Text="{Binding Note}" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap"></TextBlock>
+                            <TextBlock Margin="3,20,3,3" Text="{Binding Note}" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap"></TextBlock>
                         </Grid>
                     </Border>
                 </DataTemplate>

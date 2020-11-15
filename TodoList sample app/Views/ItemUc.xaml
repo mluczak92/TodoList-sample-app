@@ -34,10 +34,18 @@
                 <Grid.Resources>
                     <Style TargetType="{x:Type TextBox}">
                         <Setter Property="Foreground" Value="Black"></Setter>
+                        <Setter Property="FontSize" Value="14"></Setter>
                     </Style>
                 </Grid.Resources>
-                <TextBox Margin="3,3,0,0" Text="{Binding Item.Time, StringFormat=\{0:h\\:mm\}, Mode=TwoWay}" VerticalAlignment="Top" HorizontalAlignment="Left" Background="Transparent"></TextBox>
-                <TextBox Margin="3,20,3,20" Text="{Binding Item.Note, Mode=TwoWay}" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" Background="Transparent"></TextBox>
+                <StackPanel Orientation="Horizontal" Margin="10,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <TextBox Text="{Binding Item.Time, StringFormat=\{0:h\\:mm\}, Mode=TwoWay}" Background="Transparent" VerticalAlignment="Center"></TextBox>
+                    <TextBlock Margin="3,0,0,0" Text="change hour" FontStyle="Italic" Foreground="Red" VerticalAlignment="Center"></TextBlock>
+                </StackPanel>
+
+                <DockPanel Margin="10,30,10,10" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock DockPanel.Dock="Top" Margin="0,0,0,3" Text="edit content" FontStyle="Italic" Foreground="Red" HorizontalAlignment="Center"></TextBlock>
+                    <TextBox Text="{Binding Item.Note, Mode=TwoWay}" TextWrapping="Wrap" Background="Transparent" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Auto"></TextBox>
+                </DockPanel>
             </Grid>
         </Border>
 
