@@ -18,7 +18,6 @@ namespace TodoList_sample_app {
         }
 
         private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {
-            e.Handled = true;
             MessageBox.Show(e.Exception.Message, "Unhandled exception occured!",
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
@@ -39,6 +38,7 @@ namespace TodoList_sample_app {
             builder.RegisterType<DatabaseMigrator>().As<IDatabaseMigrator>();
             builder.RegisterType<EFDaysRepository>().As<IDaysRepository>();
             builder.RegisterType<EFItemsRepository>().As<IItemsRepository>();
+            builder.RegisterType<CalendarLikeBoundriesSelector>().As<IBoundriesSelector>();
 
             container = builder.Build();
         }

@@ -9,8 +9,8 @@ namespace TodoList_sample_app.Models {
             this.context = context;
         }
 
-        public async Task Add(TodoDay day, TodoItem item) {
-            day.Items.Add(item);
+        public async Task Add(TodoItem item) {
+            context.Items.Add(item);
             await context.SaveChangesAsync();
         }
     }

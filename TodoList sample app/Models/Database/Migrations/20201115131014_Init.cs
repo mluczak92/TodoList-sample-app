@@ -11,11 +11,13 @@ namespace TodoList_sample_app.Models.Database.Migrations
                 name: "Days",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Day = table.Column<DateTime>(type: "date", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Days", x => x.Day);
+                    table.PrimaryKey("PK_Days", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -27,23 +29,30 @@ namespace TodoList_sample_app.Models.Database.Migrations
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Time = table.Column<TimeSpan>(nullable: false),
-                    TodoDayDay = table.Column<DateTime>(nullable: true)
+                    DayId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Items", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Items_Days_TodoDayDay",
-                        column: x => x.TodoDayDay,
+                        name: "FK_Items_Days_DayId",
+                        column: x => x.DayId,
                         principalTable: "Days",
-                        principalColumn: "Day",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_TodoDayDay",
+                name: "IX_Days_Day",
+                table: "Days",
+                column: "Day",
+                unique: true)
+                .Annotation("SqlServer:Clustered", false);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Items_DayId",
                 table: "Items",
-                column: "TodoDayDay");
+                column: "DayId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

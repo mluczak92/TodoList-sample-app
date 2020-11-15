@@ -10,12 +10,14 @@ namespace TodoList_sample_app.Models.Database {
 
     class ServerConnectionException : DatabaseException {
         public ServerConnectionException(Exception innerEx, string conString) :
-            base($"Cannot connect to database server using provided connection string: {conString}.", innerEx) { }
+            base($"Cannot connect to database server using connection string: \"{conString}\".\n\n" +
+                $"You can provide another connection string by passing it as application argument.", innerEx) { }
     }
 
     class MigrationException : DatabaseException {
         public MigrationException(Exception innerEx, string conString)
-            : base($"Cannot apply migrations using provided connection string: {conString}.", innerEx) { }
+            : base($"Cannot apply migrations using connection string: \"{conString}\".\n\n" +
+                  $"You can provide another connection string as application argument.", innerEx) { }
     }
 
     class DatabaseMigrator : IDatabaseMigrator {
@@ -56,8 +58,8 @@ namespace TodoList_sample_app.Models.Database {
 
                 if (i.Date == DateTime.Now.Date) {
                     newDay.Items.Add(new TodoItem() {
-                        Time = DateTime.Now.TimeOfDay,
-                        Name = "Your first sample task!"
+                        Time = TimeSpan.FromMinutes((int)DateTime.Now.TimeOfDay.TotalMinutes),
+                        Note = "Your first sample task!"
                     });
                 }
 

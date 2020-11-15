@@ -20,5 +20,16 @@ namespace TodoList_sample_app.Models.Database {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             optionsBuilder.UseSqlServer(conString);
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder) {
+            modelBuilder.Entity<TodoDay>()
+                .Property(x => x.Day)
+                .HasColumnType("date");
+
+            modelBuilder.Entity<TodoDay>()
+                .HasIndex(x => x.Day)
+                .IsUnique(true)
+                .IsClustered(false);
+        }
     }
 }

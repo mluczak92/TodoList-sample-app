@@ -10,7 +10,7 @@ using TodoList_sample_app.Models.Database;
 namespace TodoList_sample_app.Models.Database.Migrations
 {
     [DbContext(typeof(TodoContext))]
-    [Migration("20201115101545_Init")]
+    [Migration("20201115131014_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,10 +23,19 @@ namespace TodoList_sample_app.Models.Database.Migrations
 
             modelBuilder.Entity("TodoList_sample_app.Models.Database.TodoDay", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<DateTime>("Day")
                         .HasColumnType("date");
 
-                    b.HasKey("Day");
+                    b.HasKey("Id");
+
+                    b.HasIndex("Day")
+                        .IsUnique()
+                        .HasAnnotation("SqlServer:Clustered", false);
 
                     b.ToTable("Days");
                 });
@@ -38,6 +47,9 @@ namespace TodoList_sample_app.Models.Database.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("DayId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -47,21 +59,18 @@ namespace TodoList_sample_app.Models.Database.Migrations
                     b.Property<TimeSpan>("Time")
                         .HasColumnType("time");
 
-                    b.Property<DateTime?>("TodoDayDay")
-                        .HasColumnType("date");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("TodoDayDay");
+                    b.HasIndex("DayId");
 
                     b.ToTable("Items");
                 });
 
             modelBuilder.Entity("TodoList_sample_app.Models.Database.TodoItem", b =>
                 {
-                    b.HasOne("TodoList_sample_app.Models.Database.TodoDay", null)
+                    b.HasOne("TodoList_sample_app.Models.Database.TodoDay", "Day")
                         .WithMany("Items")
-                        .HasForeignKey("TodoDayDay");
+                        .HasForeignKey("DayId");
                 });
 #pragma warning restore 612, 618
         }
