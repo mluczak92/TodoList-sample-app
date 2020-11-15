@@ -16,25 +16,38 @@
             <Label DockPanel.Dock="Left" Content="{Binding Day.Day, Mode=OneTime}" ContentStringFormat="dddd, dd MMMM yyyy" FontWeight="Bold"></Label>
             <DockPanel DockPanel.Dock="Right" LastChildFill="False">
                 <Button Width="50" DockPanel.Dock="Right" Content="Back" Command="{Binding ElementName=MainContainer, Path=DataContext.GotoCalendarCmd}" CommandParameter="{Binding Day}"></Button>
+                <Button Margin="0,0,2,0" Width="50" DockPanel.Dock="Right" Content="New" Command="{Binding NewTaskCmd}"></Button>
             </DockPanel>
         </DockPanel>
 
-        <ItemsControl Margin="15,15,15,15" ItemsSource="{Binding Items}">
+        <ItemsControl Margin="15" ItemsSource="{Binding Items}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border Margin="1" BorderThickness="2" CornerRadius="3" Background="Wheat">
                         <Border.BorderBrush>
                             <SolidColorBrush Color="Black" Opacity="0.3"/>
                         </Border.BorderBrush>
-                        <StackPanel>
-                            <StackPanel.Resources>
+                        <Grid>
+                            <interactivity:Interaction.Triggers>
+                                <interactivity:EventTrigger EventName="MouseDown">
+                                    <interactivity:InvokeCommandAction Command="{Binding ElementName=MainContainer, Path=DataContext.GotoItemCmd}" CommandParameter="{Binding .}"/>
+                                </interactivity:EventTrigger>
+                            </interactivity:Interaction.Triggers>
+                            <Grid.Resources>
                                 <Style TargetType="{x:Type Label}">
                                     <Setter Property="Foreground" Value="Black"></Setter>
                                 </Style>
-                            </StackPanel.Resources>
-                            <Label Content="{Binding Time, StringFormat=HH\\:mm}"></Label>
-                            <Label Content="{Binding Note}" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
-                        </StackPanel>
+                                <Style TargetType="{x:Type Grid}">
+                                    <Style.Triggers>
+                                        <Trigger Property="Border.IsMouseOver" Value="True">
+                                            <Setter Property="Border.Background" Value="Yellow" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Resources>
+                            <TextBlock Margin="3,3,0,0" Text="{Binding Time, StringFormat=\{0:h\\:mm\}}"></TextBlock>
+                            <TextBlock Text="{Binding Note}" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap"></TextBlock>
+                        </Grid>
                     </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

@@ -43,6 +43,7 @@ namespace TodoList_sample_app {
             builder.RegisterType<CalendarLikeBoundriesSelector>().As<IBoundriesSelector>();
             builder.RegisterType<CalendarVm>().As<ICalendarVm>();
             builder.RegisterType<DayVm>().As<IDayVm>();
+            builder.RegisterType<ItemVm>().As<IItemVm>();
 
             container = builder.Build();
         }

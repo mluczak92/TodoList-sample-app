@@ -23,8 +23,8 @@ namespace TodoList_sample_app.ViewModels {
 
         IEnumerable<TodoDayPresenter> days;
 
-        public CalendarVm(IDaysRepository daysRepo, IItemsRepository itemsRepo,
-            IBoundriesSelector boundriesSelector, TodoDay day = null) {
+        public CalendarVm(IDaysRepository daysRepo, IBoundriesSelector boundriesSelector,
+            TodoDay day = null) {
             this.daysRepo = daysRepo;
             this.boundriesSelector = boundriesSelector;
 

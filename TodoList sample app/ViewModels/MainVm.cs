@@ -21,6 +21,7 @@ namespace TodoList_sample_app.ViewModels {
             LoadedCbCmd = new DelegateCommand(LoadedCb, () => true);
             GotoDayCmd = new DelegateCommand<TodoDay>(GoToDay, x => true);
             GotoCalendarCmd = new DelegateCommand<TodoDay>(GoToCalendar, x => true);
+            GotoItemCmd = new DelegateCommand<TodoItem>(GoToItem, x => true);
         }
 
         public ITodoVm CurrentVm {
@@ -36,18 +37,23 @@ namespace TodoList_sample_app.ViewModels {
         public ICommand LoadedCbCmd { get; }
         public ICommand GotoDayCmd { get; }
         public ICommand GotoCalendarCmd { get; }
+        public ICommand GotoItemCmd { get; }
 
         async void LoadedCb() {
             await dbChecker.EnsureMigrated();
             CurrentVm = scope.Resolve<ICalendarVm>();
         }
 
-        void GoToDay(TodoDay day) {
+        public void GoToDay(TodoDay day) {
             CurrentVm = scope.Resolve<IDayVm>(new TypedParameter(typeof(TodoDay), day));
         }
 
         void GoToCalendar(TodoDay day) {
             CurrentVm = scope.Resolve<ICalendarVm>(new TypedParameter(typeof(TodoDay), day));
+        }
+
+        public void GoToItem(TodoItem item) {
+            CurrentVm = scope.Resolve<IItemVm>(new TypedParameter(typeof(TodoItem), item));
         }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null) {

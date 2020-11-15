@@ -12,11 +12,28 @@ namespace TodoList_sample_app.Models {
 
         public IQueryable<TodoItem> GetItems(TodoDay day) {
             return context.Items
-                .Where(x => x.Day == day);
+                .Where(x => x.DayId == day.Id);
+        }
+
+        public TodoItem ReloadItem(TodoItem item) {
+            context.Entry(item).Reload();
+            return item;
         }
 
         public async Task Add(TodoItem item) {
             context.Items.Add(item);
+            await context.SaveChangesAsync();
+            await context.Entry(item).Reference(x => x.Day).LoadAsync();
+        }
+
+        public async Task<TodoItem> Update(TodoItem item) {
+            context.Items.Update(item);
+            await context.SaveChangesAsync();
+            return item;
+        }
+
+        public async Task Remove(TodoItem item) {
+            context.Remove(item);
             await context.SaveChangesAsync();
         }
     }

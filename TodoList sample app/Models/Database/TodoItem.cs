@@ -5,6 +5,7 @@ namespace TodoList_sample_app.Models.Database {
         public int Id { get; set; }
         public string Note { get; set; }
         public TimeSpan Time { get; set; }
+        public int DayId { get; set; }
         public TodoDay Day { get; set; }
     }
 }

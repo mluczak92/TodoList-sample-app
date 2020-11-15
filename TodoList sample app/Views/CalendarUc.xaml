@@ -30,39 +30,42 @@
             <Label Content="Su" HorizontalAlignment="Center" FontWeight="Bold"></Label>
         </UniformGrid>
 
-        <ItemsControl Margin="15,15,15,15" ItemsSource="{Binding Days}">
+        <ItemsControl Margin="15" ItemsSource="{Binding Days}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border Margin="1" BorderThickness="2" CornerRadius="3">
                         <Border.BorderBrush>
                             <SolidColorBrush Color="Black" Opacity="0.3"/>
                         </Border.BorderBrush>
-                        <Border.Resources>
-                            <Style TargetType="{x:Type Border}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsDayFromSelectedMonth}" Value="False">
-                                        <Setter Property="Opacity" Value="0.1" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsWeekend}" Value="True">
-                                        <Setter Property="Background" Value="Salmon" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsToday}" Value="True">
-                                        <Setter Property="Background" Value="Red" />
-                                    </DataTrigger>
-                                    <Trigger Property="Border.IsMouseOver" Value="True">
-                                        <Setter Property="Border.Background" Value="Gray" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Resources>
-                        <DockPanel>
+                        <Grid>
                             <interactivity:Interaction.Triggers>
-                                <interactivity:EventTrigger EventName="PreviewMouseDown">
+                                <interactivity:EventTrigger EventName="MouseDown">
                                     <interactivity:InvokeCommandAction Command="{Binding ElementName=MainContainer, Path=DataContext.GotoDayCmd}" CommandParameter="{Binding Original}"/>
                                 </interactivity:EventTrigger>
                             </interactivity:Interaction.Triggers>
+                            <Grid.Resources>
+                                <Style TargetType="{x:Type Grid}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsDayFromSelectedMonth}" Value="False">
+                                            <Setter Property="Opacity" Value="0.1" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsWeekend}" Value="True">
+                                            <Setter Property="Background" Value="Salmon" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsWeekend}" Value="False">
+                                            <Setter Property="Background" Value="{StaticResource MahApps.Brushes.ThemeBackground}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsToday}" Value="True">
+                                            <Setter Property="Background" Value="Red" />
+                                        </DataTrigger>
+                                        <Trigger Property="Border.IsMouseOver" Value="True">
+                                            <Setter Property="Border.Background" Value="Gray" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Resources>
                             <Label Content="{Binding Original.Day}" ContentStringFormat="dd" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
-                        </DockPanel>
+                        </Grid>
                     </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
