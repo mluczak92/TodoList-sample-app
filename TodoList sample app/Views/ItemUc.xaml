@@ -37,7 +37,7 @@
                     </Style>
                 </Grid.Resources>
                 <TextBox Margin="3,3,0,0" Text="{Binding Item.Time, StringFormat=\{0:h\\:mm\}, Mode=TwoWay}" VerticalAlignment="Top" HorizontalAlignment="Left" Background="Transparent"></TextBox>
-                <TextBox Text="{Binding Item.Note, Mode=TwoWay}" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" Background="Transparent"></TextBox>
+                <TextBox Margin="3,20,3,20" Text="{Binding Item.Note, Mode=TwoWay}" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" Background="Transparent"></TextBox>
             </Grid>
         </Border>
 

@@ -59,7 +59,7 @@ namespace TodoList_sample_app.Models.Database {
                 if (i.Date == DateTime.Now.Date) {
                     newDay.Items.Add(new TodoItem() {
                         Time = TimeSpan.FromMinutes((int)DateTime.Now.TimeOfDay.TotalMinutes),
-                        Note = "Your first sample task!"
+                        Note = "This is your first task for today!"
                     });
                 }
 
