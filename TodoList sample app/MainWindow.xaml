@@ -1,0 +1,67 @@
+﻿<Window x:Class="TodoList_sample_app.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        Title="TodoList sample app" Height="480" Width="800" ResizeMode="NoResize">
+
+    <Grid IsEnabled="{Binding IsLoaded, Mode=OneWay}">
+        <interactivity:Interaction.Triggers>
+            <interactivity:EventTrigger EventName="Loaded">
+                <interactivity:InvokeCommandAction Command="{Binding LoadedCbCmd}"/>
+            </interactivity:EventTrigger>
+        </interactivity:Interaction.Triggers>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.2*"></ColumnDefinition>
+            <ColumnDefinition Width="0.4*"></ColumnDefinition>
+            <ColumnDefinition Width="0.4*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            
+            <StackPanel Grid.Row ="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="From:" VerticalAlignment="Center"></TextBlock>
+                <DatePicker SelectedDate="{Binding StartDate, Mode=TwoWay, StringFormat={}{0:dd.MM.yyyy}}" Margin="3" VerticalAlignment="Center"></DatePicker>
+            </StackPanel>
+            
+            <ListView Grid.Row="1" Margin="0,10,0,0" ItemsSource="{Binding Days, Mode=OneWay}" SelectedItem="{Binding SelectedDay, Mode=TwoWay}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Day, StringFormat={}{0:dd.MM.yyyy}}"/>
+                        <GridViewColumn Header="Tasks" DisplayMemberBinding="{Binding Items.Count}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+
+        <Grid Grid.Column="1" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            
+            <Button Grid.Row="0" Content="{Binding SelectedDay.Day, Mode=OneWay}" Command="{Binding NewTaskCmd}" 
+                    ContentStringFormat="New {0:dd.MM} task" Padding="5" HorizontalAlignment="Center" />
+            
+            <ListView Grid.Row="1" Margin="0,10,0,0" ItemsSource="{Binding Items, Mode=OneWay}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Hour" DisplayMemberBinding="{Binding Time, StringFormat=\{0:h\\:mm\}}"/>
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+
+        <StackPanel Grid.Column="2" Margin="15">
+
+        </StackPanel>
+    </Grid>
+</Window>
