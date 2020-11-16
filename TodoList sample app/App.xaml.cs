@@ -31,21 +31,29 @@ namespace TodoList_sample_app {
         void RegisterServices() {
             ContainerBuilder builder = new ContainerBuilder();
 
-            builder.RegisterType<MainVm>()
-                .As<IMainVm>()
-                .SingleInstance();
-
             builder.RegisterType<TodoContext>()
                 .WithParameter(new TypedParameter(typeof(string), conString))
                 .AsSelf();
 
+            builder.RegisterType<MainVm>()
+                .As<IMainVm>()
+                .As<INotificationReceiver>()
+                .SingleInstance();
+
+            builder.RegisterType<NotificationDaemon>()
+                .As<INotificationDaemon>()
+                .SingleInstance();
+
             builder.RegisterType<DatabaseMigrator>().As<IDatabaseMigrator>();
             builder.RegisterType<EFDaysRepository>().As<IDaysRepository>();
             builder.RegisterType<EFItemsRepository>().As<IItemsRepository>();
+
             builder.RegisterType<DatesBoundriesSelector>().As<IBoundriesSelector>();
+
             builder.RegisterType<CalendarVm>().As<ICalendarVm>();
             builder.RegisterType<DayVm>().As<IDayVm>();
             builder.RegisterType<ItemVm>().As<IItemVm>();
+            builder.RegisterType<NotificationsVm>().As<INotificationsVm>();
 
             container = builder.Build();
         }

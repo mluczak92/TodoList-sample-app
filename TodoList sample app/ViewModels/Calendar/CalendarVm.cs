@@ -31,7 +31,7 @@ namespace TodoList_sample_app.ViewModels {
             maxMonth = new DateTime(2049, 12, 1);
 
             NextMonthCmd = new DelegateCommand(AddMonth, CanAddMonth);
-            NextMonthCmd = new DelegateCommand(SubMonth, CanSubMonth);
+            PrevMonthCmd = new DelegateCommand(SubMonth, CanSubMonth);
         }
 
         public DateTime SelectedMonth {

@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using TodoList_sample_app.Models.Database;
 
@@ -13,12 +15,12 @@ namespace TodoList_sample_app.Models {
             this.scope = scope;
         }
 
-        public async Task<IEnumerable<TodoItem>> GetOrderedItemsForDay(TodoDay day) {
+        public async Task<IEnumerable<TodoItem>> GetOrderedItems(Expression<Func<TodoItem, bool>> condition) {
             using ILifetimeScope nested = scope.BeginLifetimeScope();
             using TodoContext context = nested.Resolve<TodoContext>();
             return await context.Items
                 .Include(x => x.Day)
-                .Where(x => x.Day == day)
+                .Where(condition)
                 .OrderBy(x => x.Time)
                 .ThenBy(x => x.Id)
                 .ToListAsync();

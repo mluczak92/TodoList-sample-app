@@ -38,13 +38,13 @@
                     </Style>
                 </Grid.Resources>
                 <StackPanel Orientation="Horizontal" Margin="10,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
-                    <TextBox Text="{Binding Item.Time, StringFormat=\{0:h\\:mm\}, Mode=TwoWay}" Background="Transparent" VerticalAlignment="Center"></TextBox>
+                    <TextBox Text="{Binding ItemTime, StringFormat=\{0:h\\:mm\}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" VerticalAlignment="Center"></TextBox>
                     <TextBlock Margin="3,0,0,0" Text="change hour" FontStyle="Italic" Foreground="Red" FontWeight="Bold" VerticalAlignment="Center"></TextBlock>
                 </StackPanel>
 
                 <DockPanel Margin="10,30,10,10" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <TextBlock DockPanel.Dock="Top" Margin="0,0,0,3" Text="edit content" FontStyle="Italic" Foreground="Red" FontWeight="Bold" HorizontalAlignment="Center"></TextBlock>
-                    <TextBox Text="{Binding Item.Note, Mode=TwoWay}" TextWrapping="Wrap" Background="Transparent" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Auto"></TextBox>
+                    <TextBox Text="{Binding ItemNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Background="Transparent" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Auto"></TextBox>
                 </DockPanel>
             </Grid>
         </Border>

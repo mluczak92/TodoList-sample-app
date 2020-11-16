@@ -31,8 +31,8 @@ namespace TodoList_sample_app.Models.Database {
                 .IsUnique(true)
                 .IsClustered(false);
 
-            modelBuilder.Entity<TodoNotification>()
-                .HasIndex(x => x.IsActive)
+            modelBuilder.Entity<TodoItem>()
+                .HasIndex(x => x.ReminderTime)
                 .IsUnique(false)
                 .IsClustered(false);
         }

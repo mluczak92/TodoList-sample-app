@@ -53,14 +53,18 @@ namespace TodoList_sample_app.Models.Database {
         }
 
         async Task Fetch(TodoContext context) {
-            DateTime max = new DateTime(2049, 12, 31);
-            for (DateTime i = new DateTime(2000, 1, 1); i <= max; i = i.AddDays(1)) {
+            DateTime max = new DateTime(2050, 1, 31);
+            for (DateTime i = new DateTime(1999, 12, 31); i <= max; i = i.AddDays(1)) {
                 TodoDay newDay = new TodoDay() {
                     Day = i,
                 };
 
                 if (i.Date == DateTime.Now.Date) {
+                    TimeSpan now = TimeSpan.FromMinutes((int)DateTime.Now.TimeOfDay.TotalMinutes);
+
                     newDay.Items.Add(new TodoItem() {
+                        Time = now.Add(TimeSpan.FromMinutes(60)),
+                        ReminderTime = i.Add(now.Add(TimeSpan.FromMinutes(30))),
                         Note = "This is your first task for today!"
                     });
                 }

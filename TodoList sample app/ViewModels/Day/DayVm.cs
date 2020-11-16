@@ -38,7 +38,7 @@ namespace TodoList_sample_app.ViewModels {
         public ICommand NewTaskCmd { get; }
 
         protected async override Task LoadAction() {
-            Items = await itemsRepo.GetOrderedItemsForDay(day);
+            Items = await itemsRepo.GetOrderedItems(x => x.Day == day);
         }
 
         async void NewTask() {
@@ -46,7 +46,16 @@ namespace TodoList_sample_app.ViewModels {
                 return;
             }
 
-            TodoItem item = new TodoItem(day);
+            DateTime selectedDate = day.Day;
+            TimeSpan now = TimeSpan.FromMinutes((int)DateTime.Now.TimeOfDay.TotalMinutes);
+
+            TodoItem item = new TodoItem() {
+                DayId = day.Id,
+                Time = now.Add(TimeSpan.FromMinutes(60)),
+                ReminderTime = selectedDate.Add(now.Add(TimeSpan.FromMinutes(30))),
+                Note = "new task"
+            };
+
             await itemsRepo.Add(item);
             scope.Resolve<IMainVm>().GoToItem(item);
         }

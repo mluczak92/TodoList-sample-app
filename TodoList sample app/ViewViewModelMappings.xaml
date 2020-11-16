@@ -11,4 +11,7 @@
     <DataTemplate DataType="{x:Type viewModels:ItemVm}">
         <views:ItemUc />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type viewModels:NotificationsVm}">
+        <views:NotificationsUc />
+    </DataTemplate>
 </ResourceDictionary>
