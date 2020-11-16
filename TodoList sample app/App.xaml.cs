@@ -47,7 +47,6 @@ namespace TodoList_sample_app {
             builder.RegisterType<DatabaseMigrator>().As<IDatabaseMigrator>();
             builder.RegisterType<EFDaysRepository>().As<IDaysRepository>();
             builder.RegisterType<EFItemsRepository>().As<IItemsRepository>();
-
             builder.RegisterType<DatesBoundriesSelector>().As<IBoundriesSelector>();
 
             builder.RegisterType<CalendarVm>().As<ICalendarVm>();

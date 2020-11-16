@@ -41,8 +41,7 @@ namespace TodoList_sample_app.Models {
         }
 
         async Task<IEnumerable<TodoItem>> GetItemsToNotifAbout() {
-            return await itemsRepository.GetOrderedItems(x => x.Day.Day.Date <= DateTime.Now.Date
-                && x.ReminderTime <= DateTime.Now);
+            return await itemsRepository.GetOrderedItems(x => x.ReminderTime <= DateTime.Now);
         }
 
         void NotifyReceivers(IEnumerable<TodoItem> items) {
