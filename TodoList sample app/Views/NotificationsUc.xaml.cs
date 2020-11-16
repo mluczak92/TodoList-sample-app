@@ -10,8 +10,8 @@ namespace TodoList_sample_app.Views {
 
         private void UniformGrid_Loaded(object sender, RoutedEventArgs e) {
             UniformGrid ug = (UniformGrid)sender;
-            if (ug.Rows < 10) {
-                ug.Rows = 10;
+            if (ug.Rows < 5) {
+                ug.Rows = 5;
             }
         }
     }
