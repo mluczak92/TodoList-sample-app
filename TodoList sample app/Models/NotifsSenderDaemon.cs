@@ -7,12 +7,12 @@ using System.Windows.Threading;
 using TodoList_sample_app.Models.Database;
 
 namespace TodoList_sample_app.Models {
-    class NotificationDaemon : INotificationDaemon {
+    class NotifsSenderDaemon : INotifsSenderDaemon {
         ILifetimeScope scope;
         IItemsRepository itemsRepository;
         DispatcherTimer dispatcherTimer;
 
-        public NotificationDaemon(ILifetimeScope scope, IItemsRepository itemsRepository) {
+        public NotifsSenderDaemon(ILifetimeScope scope, IItemsRepository itemsRepository) {
             this.scope = scope;
             this.itemsRepository = itemsRepository;
 
@@ -23,7 +23,7 @@ namespace TodoList_sample_app.Models {
 
         public async Task Start() {
             dispatcherTimer.Start();
-            //await Tick();
+            await Tick();
         }
 
         private void DispatcherTimer_Tick(object sender, EventArgs e) {
@@ -46,7 +46,7 @@ namespace TodoList_sample_app.Models {
         }
 
         void NotifyReceivers(IEnumerable<TodoItem> items) {
-            INotificationReceiver receiver = scope.Resolve<INotificationReceiver>();
+            INotifsReceiver receiver = scope.Resolve<INotifsReceiver>();
             receiver.Receive(items);
         }
     }

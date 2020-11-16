@@ -7,7 +7,7 @@
     <ItemsControl Margin="15" ItemsSource="{Binding Notifs}">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <Border Margin="1" BorderThickness="2" CornerRadius="3" Background="Red">
+                <Border Margin="1" BorderThickness="2" CornerRadius="3" Background="red">
                     <Border.BorderBrush>
                         <SolidColorBrush Color="Black" Opacity="0.5"/>
                     </Border.BorderBrush>

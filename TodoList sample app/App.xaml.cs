@@ -37,11 +37,11 @@ namespace TodoList_sample_app {
 
             builder.RegisterType<MainVm>()
                 .As<IMainVm>()
-                .As<INotificationReceiver>()
+                .As<INotifsReceiver>()
                 .SingleInstance();
 
-            builder.RegisterType<NotificationDaemon>()
-                .As<INotificationDaemon>()
+            builder.RegisterType<NotifsSenderDaemon>()
+                .As<INotifsSenderDaemon>()
                 .SingleInstance();
 
             builder.RegisterType<DatabaseMigrator>().As<IDatabaseMigrator>();

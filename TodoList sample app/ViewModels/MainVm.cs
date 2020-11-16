@@ -8,16 +8,16 @@ using TodoList_sample_app.Models;
 using TodoList_sample_app.Models.Database;
 
 namespace TodoList_sample_app.ViewModels {
-    class MainVm : AAsyncLoadVm, IMainVm, INotificationReceiver, INotifyPropertyChanged {
+    class MainVm : AAsyncLoadVm, IMainVm, INotifsReceiver, INotifyPropertyChanged {
         IDatabaseMigrator migrator;
         ILifetimeScope scope;
-        INotificationDaemon notificationDaemon;
+        INotifsSenderDaemon notificationDaemon;
 
         ITodoVm currentVm;
         ITodoVm preNotificationVm;
 
         public MainVm(IDatabaseMigrator migrator, ILifetimeScope scope,
-            INotificationDaemon notificationDaemon) {
+            INotifsSenderDaemon notificationDaemon) {
             this.migrator = migrator;
             this.scope = scope;
             this.notificationDaemon = notificationDaemon;
