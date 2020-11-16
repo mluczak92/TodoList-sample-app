@@ -18,7 +18,7 @@ namespace TodoList_sample_app.Models.Database {
     class MigrationException : DatabaseException {
         public MigrationException(Exception innerEx, string conString)
             : base($"Cannot apply migrations using connection string: \"{conString}\".\n\n" +
-                  $"You can provide another connection string as application argument.", innerEx) { }
+                  $"You can provide another connection string by passing it as application argument.", innerEx) { }
     }
 
     class DatabaseMigrator : IDatabaseMigrator {
