@@ -14,6 +14,7 @@ namespace TodoList_sample_app.ViewModels {
         INotificationDaemon notificationDaemon;
 
         ITodoVm currentVm;
+        ITodoVm preNotificationVm;
 
         public MainVm(IDatabaseMigrator migrator, ILifetimeScope scope,
             INotificationDaemon notificationDaemon) {
@@ -39,22 +40,22 @@ namespace TodoList_sample_app.ViewModels {
         public ICommand GotoDayCmd { get; }
         public ICommand GotoCalendarCmd { get; }
         public ICommand GotoItemCmd { get; }
+        public ICommand CloseNotifCmd { get; }
 
         protected async override Task LoadAction() {
             await migrator.EnsureMigrated();
+            CurrentVm = scope.Resolve<ICalendarVm>();
             await notificationDaemon.Start();
-
-            if (currentVm == null) //could received notifs before
-                CurrentVm = scope.Resolve<ICalendarVm>();
         }
 
         public void Receive(IEnumerable<TodoItem> items) {
-            //if (currentVm is INotificationsVm currentNotificationVm) {
-            //    currentNotificationVm.Add(notifs);
-            //} else {
-            //    CurrentVm = scope.Resolve<INotificationsVm>(
-            //        new TypedParameter(typeof(IEnumerable<TodoNotification>), notifs));
-            //}
+            if (currentVm is INotificationsVm currentNotificationVm) {
+                currentNotificationVm.Add(items);
+            } else {
+                preNotificationVm = currentVm;
+                CurrentVm = scope.Resolve<INotificationsVm>(
+                    new TypedParameter(typeof(IEnumerable<TodoItem>), items));
+            }
         }
 
         public void GoToDay(TodoDay day) {
@@ -67,6 +68,11 @@ namespace TodoList_sample_app.ViewModels {
 
         public void GoToItem(TodoItem item) {
             CurrentVm = scope.Resolve<IItemVm>(new TypedParameter(typeof(TodoItem), item));
+        }
+
+        public void CloseNotif() {
+            CurrentVm = preNotificationVm;
+            preNotificationVm = null;
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using TodoList_sample_app.Models.Database;
 
 namespace TodoList_sample_app.ViewModels {
@@ -24,8 +23,14 @@ namespace TodoList_sample_app.ViewModels {
             }
         }
 
-        public void Add(IEnumerable<TodoItem> notifs) {
+        public void Add(IEnumerable<TodoItem> items) {
+            foreach(TodoItem i in items) {
+                if (notifs.Contains(i)) {
+                    continue;
+                }
 
+                Notifs.Add(i);
+            }
         }
     }
 }

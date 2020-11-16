@@ -22,40 +22,32 @@ namespace TodoList_sample_app.Models {
         }
 
         public async Task Start() {
-            //dispatcherTimer.Start();
+            dispatcherTimer.Start();
             //await Tick();
         }
 
         private void DispatcherTimer_Tick(object sender, EventArgs e) {
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            //Tick();
+            Tick();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
-        //        async Task Tick() {
-        //            IEnumerable<TodoItem> items = await GetItemsToCreateNotif();
+        async Task Tick() {
+            IEnumerable<TodoItem> items = await GetItemsToNotifAbout();
 
-        //            if (items.Any()) {
-        //                IEnumerable<TodoNotification> notifs = await CreateNotifs(items);
-        //                NotifyReceivers(notifs);
-        //            }
-        //        }
+            if (items.Any()) {
+                NotifyReceivers(items);
+            }
+        }
 
-        //        async Task<IEnumerable<TodoItem>> GetItemsToCreateNotif() {
-        //            return await itemsRepository.GetOrderedItems(x => x.Day.Day.Date <= DateTime.Now.Date
-        //                && x.Time <= DateTime.Now.AddMinutes(15).TimeOfDay
-        //                && !x.Notifications.Any(x => x.IsActive));
-        //        }
+        async Task<IEnumerable<TodoItem>> GetItemsToNotifAbout() {
+            return await itemsRepository.GetOrderedItems(x => x.Day.Day.Date <= DateTime.Now.Date
+                && x.ReminderTime <= DateTime.Now);
+        }
 
-        //        async Task<IEnumerable<TodoNotification>> CreateNotifs(IEnumerable<TodoItem> items) {
-        //            IEnumerable<TodoNotification> notifs = items.Select(x => new TodoNotification(x));
-        //            await notifsRepository.AddRange(notifs);
-        //            return notifs;
-        //        }
-
-        //        void NotifyReceivers(IEnumerable<TodoNotification> notifs) {
-        //            INotificationReceiver receiver = scope.Resolve<INotificationReceiver>();
-        //            receiver.Receive(notifs);
-        //        }
+        void NotifyReceivers(IEnumerable<TodoItem> items) {
+            INotificationReceiver receiver = scope.Resolve<INotificationReceiver>();
+            receiver.Receive(items);
+        }
     }
 }
