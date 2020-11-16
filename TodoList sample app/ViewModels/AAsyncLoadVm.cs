@@ -11,10 +11,12 @@ namespace TodoList_sample_app.ViewModels {
         }
 
         async void Load() {
-            if (!initStarted) {
-                initStarted = true;
-                await LoadAction();
+            if (initStarted) {
+                return;
             }
+
+            initStarted = true;
+            await LoadAction();
         }
 
         protected abstract Task LoadAction();

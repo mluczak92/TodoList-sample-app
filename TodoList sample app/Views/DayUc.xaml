@@ -25,7 +25,7 @@
                 <DataTemplate>
                     <Border Margin="1" BorderThickness="2" CornerRadius="3" Background="Wheat">
                         <Border.BorderBrush>
-                            <SolidColorBrush Color="Black" Opacity="0.3"/>
+                            <SolidColorBrush Color="Black" Opacity="0.5"/>
                         </Border.BorderBrush>
                         <Grid>
                             <interactivity:Interaction.Triggers>
@@ -54,7 +54,7 @@
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Loaded="UniformGrid_Loaded" />
+                    <UniformGrid />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>

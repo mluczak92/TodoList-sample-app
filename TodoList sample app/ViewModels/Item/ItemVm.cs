@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Prism.Commands;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TodoList_sample_app.Models;
@@ -16,8 +17,8 @@ namespace TodoList_sample_app.ViewModels {
             this.itemsRepo = itemsRepo;
             this.scope = scope;
 
-            SaveCmd = new DelegateCommand(Save, CanSave);
-            DeleteCmd = new DelegateCommand(Delete, () => true);
+            SaveCmd = new DelegateCommand(Save, CanSaveOrDelete);
+            DeleteCmd = new DelegateCommand(Delete, CanSaveOrDelete);
         }
 
         public TodoItem Item {
@@ -39,15 +40,24 @@ namespace TodoList_sample_app.ViewModels {
         }
 
         async void Save() {
+            if (!CanSaveOrDelete()) {
+                return;
+            }
+
             await itemsRepo.Update(item);
             scope.Resolve<IMainVm>().GoToDay(item.Day);
         }
 
-        bool CanSave() {
-            return true;
+        bool CanSaveOrDelete() {
+            return item.Day?.Day.Date >= DateTime.Now.Date
+                && item.Time >= DateTime.Now.TimeOfDay;
         }
 
         async void Delete() {
+            if (!CanSaveOrDelete()) {
+                return;
+            }
+
             await itemsRepo.Remove(item);
             scope.Resolve<IMainVm>().GoToDay(item.Day);
         }

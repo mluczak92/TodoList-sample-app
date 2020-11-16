@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Autofac;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
@@ -21,18 +22,20 @@ namespace TodoList_sample_app.Models.Database {
     }
 
     class DatabaseMigrator : IDatabaseMigrator {
-        TodoContext context;
+        ILifetimeScope scope;
 
-        public DatabaseMigrator(TodoContext context) {
-            this.context = context;
+        public DatabaseMigrator(ILifetimeScope scope) {
+            this.scope = scope;
         }
 
         async public Task EnsureMigrated() {
-            await CheckSchema();
-            await CheckInitData();
+            using ILifetimeScope nested = scope.BeginLifetimeScope();
+            using TodoContext context = nested.Resolve<TodoContext>();
+            await CheckSchema(context);
+            await CheckInitData(context);
         }
 
-        async Task CheckSchema() {
+        async Task CheckSchema(TodoContext context) {
             try {
                 await context.Database.MigrateAsync();
             } catch (SqlException ex) when (ex.Number == -1 || ex.Number == 2 || ex.Number == 53) {
@@ -43,13 +46,13 @@ namespace TodoList_sample_app.Models.Database {
             }
         }
 
-        async Task CheckInitData() {
+        async Task CheckInitData(TodoContext context) {
             if (!await context.Days.AnyAsync()) {
-                await Fetch();
+                await Fetch(context);
             }
         }
 
-        async Task Fetch() {
+        async Task Fetch(TodoContext context) {
             DateTime max = new DateTime(2049, 12, 31);
             for (DateTime i = new DateTime(2000, 1, 1); i <= max; i = i.AddDays(1)) {
                 TodoDay newDay = new TodoDay() {
@@ -58,7 +61,6 @@ namespace TodoList_sample_app.Models.Database {
 
                 if (i.Date == DateTime.Now.Date) {
                     newDay.Items.Add(new TodoItem() {
-                        Time = TimeSpan.FromMinutes((int)DateTime.Now.TimeOfDay.TotalMinutes),
                         Note = "This is your first task for today!"
                     });
                 }

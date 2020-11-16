@@ -30,12 +30,8 @@ namespace TodoList_sample_app.ViewModels {
             minMonth = new DateTime(2000, 1, 1);
             maxMonth = new DateTime(2049, 12, 1);
 
-            NextMonthCmd = new DelegateCommand(
-                () => SelectedMonth = selectedMonth.AddMonths(1),
-                () => selectedMonth < maxMonth);
-            PrevMonthCmd = new DelegateCommand(
-                () => SelectedMonth = selectedMonth.AddMonths(-1),
-                () => selectedMonth > minMonth);
+            NextMonthCmd = new DelegateCommand(AddMonth, CanAddMonth);
+            NextMonthCmd = new DelegateCommand(SubMonth, CanSubMonth);
         }
 
         public DateTime SelectedMonth {
@@ -70,6 +66,30 @@ namespace TodoList_sample_app.ViewModels {
 
             Days = (await daysRepo.GetOrderedDaysWithItems(x => x.Day.Date >= min && x.Day.Date <= max))
                 .Select(x => new TodoDayPresenter(selectedMonth.Month, x));
+        }
+
+        void AddMonth() {
+            if (!CanAddMonth()) {
+                return;
+            }
+
+            SelectedMonth = selectedMonth.AddMonths(1);
+        }
+
+        bool CanAddMonth() {
+            return selectedMonth < maxMonth;
+        }
+
+        void SubMonth() {
+            if (!CanSubMonth()) {
+                return;
+            }
+
+            SelectedMonth = selectedMonth.AddMonths(-1);
+        }
+
+        bool CanSubMonth() {
+            return selectedMonth > minMonth;
         }
     }
 }

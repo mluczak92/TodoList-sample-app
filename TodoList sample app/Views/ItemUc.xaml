@@ -28,7 +28,7 @@
 
         <Border Margin="15,15,15,0" Grid.Row="1" BorderThickness="2" CornerRadius="3" Background="Wheat" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Border.BorderBrush>
-                <SolidColorBrush Color="Black" Opacity="0.3"/>
+                <SolidColorBrush Color="Black" Opacity="0.5"/>
             </Border.BorderBrush>
             <Grid>
                 <Grid.Resources>

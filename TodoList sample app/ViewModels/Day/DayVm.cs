@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Prism.Commands;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -19,7 +20,7 @@ namespace TodoList_sample_app.ViewModels {
             this.day = day;
             this.scope = scope;
 
-            NewTaskCmd = new DelegateCommand(NewTask, () => true);
+            NewTaskCmd = new DelegateCommand(NewTask, CanAddNew);
         }
 
         public TodoDay Day => day;
@@ -41,9 +42,17 @@ namespace TodoList_sample_app.ViewModels {
         }
 
         async void NewTask() {
+            if (!CanAddNew()) {
+                return;
+            }
+
             TodoItem item = new TodoItem(day);
             await itemsRepo.Add(item);
             scope.Resolve<IMainVm>().GoToItem(item);
+        }
+
+        bool CanAddNew() {
+            return day.Day.Date >= DateTime.Now.Date;
         }
     }
 }

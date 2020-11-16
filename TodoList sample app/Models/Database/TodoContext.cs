@@ -30,6 +30,11 @@ namespace TodoList_sample_app.Models.Database {
                 .HasIndex(x => x.Day)
                 .IsUnique(true)
                 .IsClustered(false);
+
+            modelBuilder.Entity<TodoNotification>()
+                .HasIndex(x => x.IsActive)
+                .IsUnique(false)
+                .IsClustered(false);
         }
     }
 }

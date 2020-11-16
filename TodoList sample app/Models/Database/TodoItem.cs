@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TodoList_sample_app.Models.Database {
     class TodoItem {
         public TodoItem() {
-            Time = TimeSpan.FromMinutes((int)DateTime.Now.TimeOfDay.TotalMinutes);
+            Time = TimeSpan.FromMinutes((int)DateTime.Now.TimeOfDay.TotalMinutes)
+                .Add(TimeSpan.FromMinutes(15));
             Note = "new task";
         }
 
@@ -16,5 +18,6 @@ namespace TodoList_sample_app.Models.Database {
         public TimeSpan Time { get; set; }
         public int DayId { get; set; }
         public TodoDay Day { get; set; }
+        public ICollection<TodoNotification> Notifications { get; set; } = new List<TodoNotification>();
     }
 }
