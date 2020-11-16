@@ -1,15 +1,12 @@
 ﻿using Autofac;
 using Prism.Commands;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using TodoList_sample_app.Models;
 using TodoList_sample_app.Models.Database;
 
 namespace TodoList_sample_app.ViewModels {
-    class ItemVm : IItemVm, INotifyPropertyChanged {
-        public event PropertyChangedEventHandler PropertyChanged;
-
+    class ItemVm : AAsyncLoadVm, IItemVm {
         TodoItem item;
         IItemsRepository itemsRepo;
         ILifetimeScope scope;
@@ -19,40 +16,40 @@ namespace TodoList_sample_app.ViewModels {
             this.itemsRepo = itemsRepo;
             this.scope = scope;
 
-            LoadedCbCmd = new DelegateCommand(RefreshItem, () => true);
-            SaveCmd = new DelegateCommand(Save, () => true);
+            SaveCmd = new DelegateCommand(Save, CanSave);
             DeleteCmd = new DelegateCommand(Delete, () => true);
         }
 
         public TodoItem Item {
             get {
                 return item;
-            } set {
+            }
+            set {
                 item = value;
                 OnPropertyChanged();
             }
         }
 
-        public ICommand LoadedCbCmd { get; }
+
         public ICommand SaveCmd { get; }
         public ICommand DeleteCmd { get; }
 
-        void RefreshItem() {
-            Item = itemsRepo.ReloadItem(item);
+        protected async override Task LoadAction() {
+            Item = await itemsRepo.Refresh(item);
         }
 
         async void Save() {
-            Item = await itemsRepo.Update(item);
+            await itemsRepo.Update(item);
             scope.Resolve<IMainVm>().GoToDay(item.Day);
+        }
+
+        bool CanSave() {
+            return true;
         }
 
         async void Delete() {
             await itemsRepo.Remove(item);
             scope.Resolve<IMainVm>().GoToDay(item.Day);
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] string name = null) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

@@ -1,14 +1,28 @@
-﻿using System.Linq;
+﻿using Autofac;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using TodoList_sample_app.Models.Database;
 
 namespace TodoList_sample_app.Models {
     class EFDaysRepository : IDaysRepository {
-        TodoContext context;
+        ILifetimeScope scope;
 
-        public EFDaysRepository(TodoContext context) {
-            this.context = context;
+        public EFDaysRepository(ILifetimeScope scope) {
+            this.scope = scope;
         }
 
-        public IQueryable<TodoDay> Days => context.Days;
+        public async Task<IEnumerable<TodoDay>> GetOrderedDaysWithItems(Expression<Func<TodoDay, bool>> condition) {
+            using ILifetimeScope nested = scope.BeginLifetimeScope();
+            using TodoContext context = nested.Resolve<TodoContext>();
+            return await context.Days
+                .Include(x => x.Items)
+                .Where(condition)
+                .OrderBy(x => x.Day)
+                .ToListAsync();
+        }
     }
 }

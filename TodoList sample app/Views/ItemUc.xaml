@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
 
         <DockPanel Margin="15,15,15,0">
-            <Label DockPanel.Dock="Left" Content="{Binding Item.Day.Day, Mode=OneTime}" ContentStringFormat="dddd, dd MMMM yyyy" FontWeight="Bold"></Label>
+            <Label DockPanel.Dock="Left" Content="{Binding Item.Day.Day}" ContentStringFormat="dddd, dd MMMM yyyy" FontWeight="Bold"></Label>
             <DockPanel DockPanel.Dock="Right" LastChildFill="False">
                 <Button Width="50" DockPanel.Dock="Right" Content="Back" Command="{Binding ElementName=MainContainer, Path=DataContext.GotoDayCmd}" CommandParameter="{Binding Item.Day}"></Button>
                 <Button Margin="0,0,2,0" Width="50" DockPanel.Dock="Right" Content="Save" Command="{Binding SaveCmd}"></Button>

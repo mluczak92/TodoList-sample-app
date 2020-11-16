@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace TodoList_sample_app.Models {
-    class CalendarLikeBoundriesSelector : IBoundriesSelector {
+    class DatesBoundriesSelector : IBoundriesSelector {
         public void Select(int year, int month, out DateTime min, out DateTime max) {
             DateTime firstDay = new DateTime(year, month, 1);
 

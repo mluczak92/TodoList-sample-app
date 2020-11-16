@@ -54,7 +54,7 @@
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid />
+                    <UniformGrid Loaded="UniformGrid_Loaded" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>

@@ -1,38 +1,54 @@
-﻿using System.Linq;
+﻿using Autofac;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TodoList_sample_app.Models.Database;
 
 namespace TodoList_sample_app.Models {
     class EFItemsRepository : IItemsRepository {
-        TodoContext context;
+        ILifetimeScope scope;
 
-        public EFItemsRepository(TodoContext context) {
-            this.context = context;
+        public EFItemsRepository(ILifetimeScope scope) {
+            this.scope = scope;
         }
 
-        public IQueryable<TodoItem> GetItems(TodoDay day) {
-            return context.Items
-                .Where(x => x.DayId == day.Id);
+        public async Task<IEnumerable<TodoItem>> GetOrderedItemsForDay(TodoDay day) {
+            using ILifetimeScope nested = scope.BeginLifetimeScope();
+            using TodoContext context = nested.Resolve<TodoContext>();
+            return await context.Items
+                .Include(x => x.Day)
+                .Where(x => x.Day == day)
+                .OrderBy(x => x.Time)
+                .ThenBy(x => x.Id)
+                .ToListAsync();
         }
 
-        public TodoItem ReloadItem(TodoItem item) {
-            context.Entry(item).Reload();
+        public async Task<TodoItem> Refresh(TodoItem item) {
+            using ILifetimeScope nested = scope.BeginLifetimeScope();
+            using TodoContext context = nested.Resolve<TodoContext>();
+            await context.Entry(item).ReloadAsync();
+            await context.Entry(item).Reference(x => x.Day).LoadAsync();
             return item;
         }
 
         public async Task Add(TodoItem item) {
+            using ILifetimeScope nested = scope.BeginLifetimeScope();
+            using TodoContext context = nested.Resolve<TodoContext>();
             context.Items.Add(item);
             await context.SaveChangesAsync();
-            await context.Entry(item).Reference(x => x.Day).LoadAsync();
         }
 
-        public async Task<TodoItem> Update(TodoItem item) {
+        public async Task Update(TodoItem item) {
+            using ILifetimeScope nested = scope.BeginLifetimeScope();
+            using TodoContext context = nested.Resolve<TodoContext>();
             context.Items.Update(item);
             await context.SaveChangesAsync();
-            return item;
         }
 
         public async Task Remove(TodoItem item) {
+            using ILifetimeScope nested = scope.BeginLifetimeScope();
+            using TodoContext context = nested.Resolve<TodoContext>();
             context.Remove(item);
             await context.SaveChangesAsync();
         }

@@ -1,19 +1,14 @@
-﻿using Autofac;
-using Microsoft.EntityFrameworkCore;
-using Prism.Commands;
+﻿using Prism.Commands;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using TodoList_sample_app.Models;
 using TodoList_sample_app.Models.Database;
 
 namespace TodoList_sample_app.ViewModels {
-    class CalendarVm : ICalendarVm, INotifyPropertyChanged {
-        public event PropertyChangedEventHandler PropertyChanged;
-
+    class CalendarVm : AAsyncLoadVm, ICalendarVm {
         IDaysRepository daysRepo;
         IBoundriesSelector boundriesSelector;
 
@@ -23,8 +18,7 @@ namespace TodoList_sample_app.ViewModels {
 
         IEnumerable<TodoDayPresenter> days;
 
-        public CalendarVm(IDaysRepository daysRepo, IBoundriesSelector boundriesSelector,
-            TodoDay day = null) {
+        public CalendarVm(IDaysRepository daysRepo, IBoundriesSelector boundriesSelector, TodoDay day = null) {
             this.daysRepo = daysRepo;
             this.boundriesSelector = boundriesSelector;
 
@@ -36,7 +30,6 @@ namespace TodoList_sample_app.ViewModels {
             minMonth = new DateTime(2000, 1, 1);
             maxMonth = new DateTime(2049, 12, 1);
 
-            LoadedCbCmd = new DelegateCommand(RefreshDays, () => true);
             NextMonthCmd = new DelegateCommand(
                 () => SelectedMonth = selectedMonth.AddMonths(1),
                 () => selectedMonth < maxMonth);
@@ -52,7 +45,9 @@ namespace TodoList_sample_app.ViewModels {
             private set {
                 selectedMonth = value;
                 OnPropertyChanged();
-                RefreshDays();
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                LoadAction();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             }
         }
 
@@ -66,24 +61,15 @@ namespace TodoList_sample_app.ViewModels {
             }
         }
 
-        public ICommand LoadedCbCmd { get; }
         public ICommand NextMonthCmd { get; }
         public ICommand PrevMonthCmd { get; }
 
-        void RefreshDays() {
+        protected async override Task LoadAction() {
             boundriesSelector.Select(selectedMonth.Year, selectedMonth.Month,
                 out DateTime min, out DateTime max);
 
-            Days = daysRepo.Days.Include(x => x.Items)
-                .Where(x => x.Day.Date >= min &&
-                    x.Day.Date <= max)
-                .OrderBy(x => x.Day)
-                .ToList()
+            Days = (await daysRepo.GetOrderedDaysWithItems(x => x.Day.Date >= min && x.Day.Date <= max))
                 .Select(x => new TodoDayPresenter(selectedMonth.Month, x));
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] string name = null) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

@@ -1,14 +1,12 @@
 ﻿using Autofac;
 using Prism.Commands;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using TodoList_sample_app.Models.Database;
 
 namespace TodoList_sample_app.ViewModels {
-    class MainVm : IMainVm, INotifyPropertyChanged {
-        public event PropertyChangedEventHandler PropertyChanged;
-
+    class MainVm : AAsyncLoadVm, IMainVm, INotifyPropertyChanged {
         IDatabaseMigrator dbChecker;
         ILifetimeScope scope;
 
@@ -18,7 +16,6 @@ namespace TodoList_sample_app.ViewModels {
             this.dbChecker = dbChecker;
             this.scope = scope;
 
-            LoadedCbCmd = new DelegateCommand(LoadedCb, () => true);
             GotoDayCmd = new DelegateCommand<TodoDay>(GoToDay, x => true);
             GotoCalendarCmd = new DelegateCommand<TodoDay>(GoToCalendar, x => true);
             GotoItemCmd = new DelegateCommand<TodoItem>(GoToItem, x => true);
@@ -34,12 +31,11 @@ namespace TodoList_sample_app.ViewModels {
             }
         }
 
-        public ICommand LoadedCbCmd { get; }
         public ICommand GotoDayCmd { get; }
         public ICommand GotoCalendarCmd { get; }
         public ICommand GotoItemCmd { get; }
 
-        async void LoadedCb() {
+        protected async override Task LoadAction() {
             await dbChecker.EnsureMigrated();
             CurrentVm = scope.Resolve<ICalendarVm>();
         }
@@ -54,10 +50,6 @@ namespace TodoList_sample_app.ViewModels {
 
         public void GoToItem(TodoItem item) {
             CurrentVm = scope.Resolve<IItemVm>(new TypedParameter(typeof(TodoItem), item));
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] string name = null) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }
