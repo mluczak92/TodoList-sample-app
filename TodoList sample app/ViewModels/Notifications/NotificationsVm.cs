@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Media;
 using System.Windows.Input;
 using TodoList_sample_app.Models;
 using TodoList_sample_app.Models.Database;
@@ -25,6 +24,7 @@ namespace TodoList_sample_app.ViewModels {
             DontShowCmd = new DelegateCommand<TodoItem>(DontShow, x => true);
         }
 
+        public IEnumerable<TodoItem> Notifications => notifs.AsEnumerable();
         public ObservableCollection<TodoItem> Notifs {
             get {
                 return notifs;
@@ -50,13 +50,15 @@ namespace TodoList_sample_app.ViewModels {
 
         void RemindLater(TodoItem item) {
             item.ReminderTime = DateTime.Now.AddMinutes(15);
-            itemsRepo.Update(item);
-            Notifs.Remove(item);
-            GoBackIfLast();
+            UpdateItem(item);
         }
 
         void DontShow(TodoItem item) {
             item.ReminderTime = null;
+            UpdateItem(item);
+        }
+
+        void UpdateItem(TodoItem item) {
             itemsRepo.Update(item);
             Notifs.Remove(item);
             GoBackIfLast();

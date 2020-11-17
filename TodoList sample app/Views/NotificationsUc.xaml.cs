@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Media;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
+using TodoList_sample_app.ViewModels;
 
 namespace TodoList_sample_app.Views {
     public partial class NotificationsUc : UserControl {
@@ -14,17 +16,23 @@ namespace TodoList_sample_app.Views {
             InitializeComponent();
         }
 
-        private void ItemsControl_Loaded(object sender, RoutedEventArgs e) {
-            Window window = Window.GetWindow(this);
+        private void ItemsControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if ((e.OldValue == null && e.NewValue != null) || //first DataContext assigned
+                (e.OldValue is INotificationsVm oldVm && e.NewValue is INotificationsVm newVm &&
+                newVm.Notifications.Count() > oldVm.Notifications.Count())) { //or new vm with more notifs
 
-            WindowInteropHelper wih = new WindowInteropHelper(window);
-            FlashWindow(wih.Handle, true);
+                Window window = Window.GetWindow(this);
+                WindowInteropHelper wih = new WindowInteropHelper(window);
 
-            if (window.WindowState == WindowState.Minimized) {
-                window.WindowState = WindowState.Normal;
+                window.Topmost = true;
+                if (window.WindowState == WindowState.Minimized) {
+                    window.WindowState = WindowState.Normal;
+                }
+
+                FlashWindow(wih.Handle, true);
+                SystemSounds.Exclamation.Play();
+                window.Topmost = false;
             }
-
-            SystemSounds.Exclamation.Play();
         }
     }
 }

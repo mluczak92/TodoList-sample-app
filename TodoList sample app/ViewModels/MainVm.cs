@@ -2,6 +2,7 @@
 using Prism.Commands;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TodoList_sample_app.Models;
@@ -49,13 +50,12 @@ namespace TodoList_sample_app.ViewModels {
         }
 
         public void Receive(IEnumerable<TodoItem> items) {
-            if (currentVm is INotificationsVm currentNotificationVm) {
-                currentNotificationVm.Add(items);
-            } else {
+            if (!(currentVm is INotificationsVm)) {
                 preNotificationVm = currentVm;
-                CurrentVm = scope.Resolve<INotificationsVm>(
-                    new TypedParameter(typeof(IEnumerable<TodoItem>), items));
             }
+
+            CurrentVm = scope.Resolve<INotificationsVm>(
+                new TypedParameter(typeof(IEnumerable<TodoItem>), items));
         }
 
         public void GoToDay(TodoDay day) {
