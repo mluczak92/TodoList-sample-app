@@ -61,11 +61,14 @@ namespace TodoList_sample_app.ViewModels {
         public bool IsReadOnly {
             get {
                 return isReadOnly;
-            } set {
+            } private set {
                 isReadOnly = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(CanEdit));
             }
         }
+
+        public bool CanEdit => !isReadOnly;
 
         public DelegateCommand SaveCmd { get; }
         public DelegateCommand DeleteCmd { get; }

@@ -45,11 +45,13 @@
                     <TextBox Text="{Binding ItemTime, StringFormat=\{0:h\\:mm\}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              IsReadOnly="{Binding IsReadOnly}"
                              Background="Transparent" VerticalAlignment="Center"></TextBox>
-                    <TextBlock Margin="3,0,0,0" Text="change hour" FontStyle="Italic" Foreground="Red" FontWeight="Bold" VerticalAlignment="Center"></TextBlock>
+                    <TextBlock Margin="3,0,0,0" Text="change hour" FontStyle="Italic" Foreground="Red" FontWeight="Bold" VerticalAlignment="Center"
+                               Visibility="{Binding CanEdit, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
                 </StackPanel>
 
                 <DockPanel Margin="10,30,10,10" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock DockPanel.Dock="Top" Margin="0,0,0,3" Text="edit content" FontStyle="Italic" Foreground="Red" FontWeight="Bold" HorizontalAlignment="Center"></TextBlock>
+                    <TextBlock DockPanel.Dock="Top" Margin="0,0,0,3" Text="edit content" FontStyle="Italic" Foreground="Red" FontWeight="Bold" HorizontalAlignment="Center"
+                               Visibility="{Binding CanEdit, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
                     <TextBox Text="{Binding ItemNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              IsReadOnly="{Binding IsReadOnly}"
                              TextWrapping="Wrap" Background="Transparent" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Auto"></TextBox>
