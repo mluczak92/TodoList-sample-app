@@ -18,11 +18,15 @@
                             <ColumnDefinition Width="auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <StackPanel Margin="5,0,0,0" VerticalAlignment="Center">
-                            <TextBlock Text="{Binding Day.Day, StringFormat={}{0:dddd}}" FontWeight="Bold" HorizontalAlignment="Left"></TextBlock>
-                            <TextBlock Text="{Binding Time, StringFormat=\{0:h\\:mm\}}" FontWeight="Bold" HorizontalAlignment="Left"></TextBlock>
+                            <TextBlock Text="{Binding Day.Day, StringFormat={}{0:dddd}}"
+                                       FontWeight="Bold" HorizontalAlignment="Left"></TextBlock>
+                            <TextBlock Text="{Binding Time, StringFormat=\{0:h\\:mm\}}"
+                                       FontWeight="Bold" HorizontalAlignment="Left"></TextBlock>
                         </StackPanel>
+                        <ScrollViewer Grid.Column="1" Margin="5,0,5,0" VerticalAlignment="Center" HorizontalAlignment="Center" VerticalScrollBarVisibility="Auto">
+                            <TextBlock TextWrapping="Wrap" Text="{Binding Note}"></TextBlock>
+                        </ScrollViewer>
 
-                        <TextBlock Grid.Column="1" Margin="5,0,5,0" Text="{Binding Note}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                         <StackPanel Orientation="Horizontal" Grid.Column="2" Margin="0,0,5,0" VerticalAlignment="Center" HorizontalAlignment="Right">
                             <Button Margin="0,0,2,0" Content="Remind in 15min" VerticalAlignment="Center"
                                     Command="{Binding Path=DataContext.RemindLaterCmd, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
@@ -37,7 +41,7 @@
         </ItemsControl.ItemTemplate>
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <UniformGrid Columns="1" Rows="8" />
+                <UniformGrid Columns="1" Rows="4" />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
     </ItemsControl>
