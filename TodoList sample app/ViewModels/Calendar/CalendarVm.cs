@@ -27,8 +27,8 @@ namespace TodoList_sample_app.ViewModels {
             else
                 selectedMonth = new DateTime(day.Day.Year, day.Day.Month, 1);
 
-            minMonth = new DateTime(2000, 1, 1);
-            maxMonth = new DateTime(2049, 12, 1);
+            minMonth = new DateTime(2020, 1, 1);
+            maxMonth = new DateTime(2029, 12, 1);
 
             NextMonthCmd = new DelegateCommand(AddMonth, CanAddMonth);
             PrevMonthCmd = new DelegateCommand(SubMonth, CanSubMonth);

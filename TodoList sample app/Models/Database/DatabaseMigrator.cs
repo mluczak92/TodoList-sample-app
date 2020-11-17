@@ -53,8 +53,8 @@ namespace TodoList_sample_app.Models.Database {
         }
 
         async Task Fetch(TodoContext context) {
-            DateTime max = new DateTime(2050, 1, 31);
-            for (DateTime i = new DateTime(1999, 12, 31); i <= max; i = i.AddDays(1)) {
+            DateTime max = new DateTime(2030, 1, 31);
+            for (DateTime i = new DateTime(2019, 12, 31); i <= max; i = i.AddDays(1)) {
                 TodoDay newDay = new TodoDay() {
                     Day = i,
                 };
