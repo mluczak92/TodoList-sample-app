@@ -41,9 +41,6 @@ namespace TodoList_sample_app.ViewModels {
             private set {
                 selectedMonth = value;
                 OnPropertyChanged();
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                LoadAction();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             }
         }
 
@@ -57,8 +54,8 @@ namespace TodoList_sample_app.ViewModels {
             }
         }
 
-        public ICommand NextMonthCmd { get; }
-        public ICommand PrevMonthCmd { get; }
+        public DelegateCommand NextMonthCmd { get; }
+        public DelegateCommand PrevMonthCmd { get; }
 
         protected async override Task LoadAction() {
             boundriesSelector.Select(selectedMonth.Year, selectedMonth.Month,
@@ -68,24 +65,28 @@ namespace TodoList_sample_app.ViewModels {
                 .Select(x => new TodoDayPresenter(selectedMonth.Month, x));
         }
 
-        void AddMonth() {
+        async void AddMonth() {
             if (!CanAddMonth()) {
                 return;
             }
 
             SelectedMonth = selectedMonth.AddMonths(1);
+            await LoadAction();
+            NextMonthCmd.RaiseCanExecuteChanged();
         }
 
         bool CanAddMonth() {
             return selectedMonth < maxMonth;
         }
 
-        void SubMonth() {
+        async void SubMonth() {
             if (!CanSubMonth()) {
                 return;
             }
 
             SelectedMonth = selectedMonth.AddMonths(-1);
+            await LoadAction();
+            PrevMonthCmd.RaiseCanExecuteChanged();
         }
 
         bool CanSubMonth() {
