@@ -65,7 +65,7 @@
                             <TextBlock Margin="2" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap"
                                        Text="{Binding Note}">
                             </TextBlock>
-                            <TextBlock></TextBlock>
+                            <TextBlock Grid.RowSpan="2"></TextBlock>
                         </Grid>
                     </Border>
                 </DataTemplate>
