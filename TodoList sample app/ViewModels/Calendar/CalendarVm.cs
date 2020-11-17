@@ -71,8 +71,7 @@ namespace TodoList_sample_app.ViewModels {
             }
 
             SelectedMonth = selectedMonth.AddMonths(1);
-            await LoadAction();
-            NextMonthCmd.RaiseCanExecuteChanged();
+            await RefreshDaysAndInvalidateCmds();
         }
 
         bool CanAddMonth() {
@@ -85,7 +84,12 @@ namespace TodoList_sample_app.ViewModels {
             }
 
             SelectedMonth = selectedMonth.AddMonths(-1);
+            await RefreshDaysAndInvalidateCmds();
+        }
+
+        async Task RefreshDaysAndInvalidateCmds() {
             await LoadAction();
+            NextMonthCmd.RaiseCanExecuteChanged();
             PrevMonthCmd.RaiseCanExecuteChanged();
         }
 
