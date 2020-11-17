@@ -5,57 +5,70 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d">
-    <DockPanel>
-        <DockPanel Margin="15,15,15,0" DockPanel.Dock="Top">
-            <interactivity:Interaction.Triggers>
-                <interactivity:EventTrigger EventName="Loaded">
-                    <interactivity:InvokeCommandAction Command="{Binding LoadedCbCmd}"/>
-                </interactivity:EventTrigger>
-            </interactivity:Interaction.Triggers>
-            <Label DockPanel.Dock="Left" Content="{Binding Day.Day, Mode=OneTime}" ContentStringFormat="dddd, dd MMMM yyyy" FontWeight="Bold"></Label>
-            <DockPanel DockPanel.Dock="Right" LastChildFill="False">
-                <Button Width="50" DockPanel.Dock="Right" Content="Back" Command="{Binding ElementName=MainContainer, Path=DataContext.GotoCalendarCmd}" CommandParameter="{Binding Day}"></Button>
-                <Button Margin="0,0,2,0" Width="50" DockPanel.Dock="Right" Content="New" Command="{Binding NewTaskCmd}"></Button>
-            </DockPanel>
-        </DockPanel>
+    <Grid Margin="15">
+        <interactivity:Interaction.Triggers>
+            <interactivity:EventTrigger EventName="Loaded">
+                <interactivity:InvokeCommandAction Command="{Binding LoadedCbCmd}"/>
+            </interactivity:EventTrigger>
+        </interactivity:Interaction.Triggers>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
 
-        <ItemsControl Margin="15" ItemsSource="{Binding Items}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border Margin="1" BorderThickness="2" CornerRadius="3" Background="Wheat">
-                        <Border.BorderBrush>
-                            <SolidColorBrush Color="Black" Opacity="0.5"/>
-                        </Border.BorderBrush>
-                        <Grid>
-                            <interactivity:Interaction.Triggers>
-                                <interactivity:EventTrigger EventName="MouseDown">
-                                    <interactivity:InvokeCommandAction Command="{Binding ElementName=MainContainer, Path=DataContext.GotoItemCmd}" CommandParameter="{Binding .}"/>
-                                </interactivity:EventTrigger>
-                            </interactivity:Interaction.Triggers>
-                            <Grid.Resources>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="FontSize" Value="14"></Setter>
-                                </Style>
-                                <Style TargetType="{x:Type Grid}">
-                                    <Style.Triggers>
-                                        <Trigger Property="Border.IsMouseOver" Value="True">
-                                            <Setter Property="Border.Background" Value="Yellow" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Grid.Resources>
-                            <TextBlock></TextBlock>
-                            <TextBlock Margin="3,3,0,0" Text="{Binding Time, StringFormat=\{0:h\\:mm\}}" VerticalAlignment="Top" HorizontalAlignment="Left"></TextBlock>
-                            <TextBlock Margin="3,20,3,3" Text="{Binding Note}" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap"></TextBlock>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-    </DockPanel>
+        <Label ContentStringFormat="dddd, dd MMMM yyyy" FontWeight="Bold"
+                   Content="{Binding Day.Day, Mode=OneTime}"></Label>
+        <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
+            <Button Width="50" Content="New"
+                    Command="{Binding NewTaskCmd}"></Button>
+            <Button Width="50" Content="Back" Margin="2,0,0,0"
+                    Command="{Binding ElementName=MainContainer, Path=DataContext.GotoCalendarCmd}"
+                    CommandParameter="{Binding Day}"></Button>
+        </StackPanel>
+
+        <ItemsControl Grid.Row="1" Grid.ColumnSpan="2" Margin="0,15,0,0" ItemsSource="{Binding Items}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="1" BorderThickness="2" CornerRadius="3" Background="Wheat">
+                            <Border.BorderBrush>
+                                <SolidColorBrush Color="Black" Opacity="0.5"/>
+                            </Border.BorderBrush>
+                            <Grid>
+                                <interactivity:Interaction.Triggers>
+                                    <interactivity:EventTrigger EventName="MouseDown">
+                                        <interactivity:InvokeCommandAction Command="{Binding ElementName=MainContainer, Path=DataContext.GotoItemCmd}" CommandParameter="{Binding .}"/>
+                                    </interactivity:EventTrigger>
+                                </interactivity:Interaction.Triggers>
+                                <Grid.Resources>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="FontSize" Value="14"></Setter>
+                                    </Style>
+                                    <Style TargetType="{x:Type Grid}">
+                                        <Style.Triggers>
+                                            <Trigger Property="Border.IsMouseOver" Value="True">
+                                                <Setter Property="Border.Background" Value="Yellow" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Resources>
+                                <TextBlock></TextBlock>
+                                <TextBlock Margin="3,3,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"
+                                       Text="{Binding Time, StringFormat=\{0:h\\:mm\}}" ></TextBlock>
+                                <TextBlock Margin="3,20,3,3" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap"
+                                       Text="{Binding Note}"></TextBlock>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+    </Grid>
 </UserControl>

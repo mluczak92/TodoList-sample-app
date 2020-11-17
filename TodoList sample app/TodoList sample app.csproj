@@ -5,6 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>TodoList_sample_app</RootNamespace>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>notes.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

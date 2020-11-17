@@ -21,7 +21,8 @@ namespace TodoList_sample_app.Models {
             return await context.Items
                 .Include(x => x.Day)
                 .Where(condition)
-                .OrderBy(x => x.Time)
+                .OrderBy(x => x.Day.Day)
+                .ThenBy(x => x.Time)
                 .ThenBy(x => x.Id)
                 .ToListAsync();
         }

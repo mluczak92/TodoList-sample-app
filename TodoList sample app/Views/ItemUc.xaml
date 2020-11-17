@@ -19,10 +19,14 @@
         </Grid.RowDefinitions>
 
         <DockPanel Margin="15,15,15,0">
-            <Label DockPanel.Dock="Left" Content="{Binding Item.Day.Day}" ContentStringFormat="dddd, dd MMMM yyyy" FontWeight="Bold"></Label>
+            <Label DockPanel.Dock="Left" ContentStringFormat="dddd, dd MMMM yyyy" FontWeight="Bold"
+                   Content="{Binding Item.Day.Day}"></Label>
             <DockPanel DockPanel.Dock="Right" LastChildFill="False">
-                <Button Width="50" DockPanel.Dock="Right" Content="Back" Command="{Binding ElementName=MainContainer, Path=DataContext.GotoDayCmd}" CommandParameter="{Binding Item.Day}"></Button>
-                <Button Margin="0,0,2,0" Width="50" DockPanel.Dock="Right" Content="Save" Command="{Binding SaveCmd}"></Button>
+                <Button Width="50" DockPanel.Dock="Right" Content="Back"
+                        Command="{Binding ElementName=MainContainer, Path=DataContext.GotoDayCmd}"
+                        CommandParameter="{Binding Item.Day}"></Button>
+                <Button Margin="0,0,2,0" Width="50" DockPanel.Dock="Right" Content="Save"
+                        Command="{Binding SaveCmd}"></Button>
             </DockPanel>
         </DockPanel>
 
@@ -38,19 +42,24 @@
                     </Style>
                 </Grid.Resources>
                 <StackPanel Orientation="Horizontal" Margin="10,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
-                    <TextBox Text="{Binding ItemTime, StringFormat=\{0:h\\:mm\}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" VerticalAlignment="Center"></TextBox>
+                    <TextBox Text="{Binding ItemTime, StringFormat=\{0:h\\:mm\}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             IsReadOnly="{Binding IsReadOnly}"
+                             Background="Transparent" VerticalAlignment="Center"></TextBox>
                     <TextBlock Margin="3,0,0,0" Text="change hour" FontStyle="Italic" Foreground="Red" FontWeight="Bold" VerticalAlignment="Center"></TextBlock>
                 </StackPanel>
 
                 <DockPanel Margin="10,30,10,10" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <TextBlock DockPanel.Dock="Top" Margin="0,0,0,3" Text="edit content" FontStyle="Italic" Foreground="Red" FontWeight="Bold" HorizontalAlignment="Center"></TextBlock>
-                    <TextBox Text="{Binding ItemNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Background="Transparent" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Auto"></TextBox>
+                    <TextBox Text="{Binding ItemNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             IsReadOnly="{Binding IsReadOnly}"
+                             TextWrapping="Wrap" Background="Transparent" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Auto"></TextBox>
                 </DockPanel>
             </Grid>
         </Border>
 
         <DockPanel Margin="15" Grid.Row="2" DockPanel.Dock="Right" LastChildFill="False" HorizontalAlignment="Right">
-            <Button Width="50" DockPanel.Dock="Right" Content="Delete" Command="{Binding DeleteCmd}" Foreground="Red"></Button>
+            <Button Width="50" DockPanel.Dock="Right" Content="Delete" Foreground="Red"
+                    Command="{Binding DeleteCmd}"></Button>
         </DockPanel>
     </Grid>
 </UserControl>

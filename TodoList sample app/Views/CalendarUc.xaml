@@ -13,10 +13,13 @@
         </interactivity:Interaction.Triggers>
 
         <DockPanel Margin="15,15,15,0" DockPanel.Dock="Top">
-            <Label DockPanel.Dock="Left" Content="{Binding SelectedMonth}" ContentStringFormat="MMMM yyyy" FontWeight="Bold"></Label>
+            <Label DockPanel.Dock="Left" ContentStringFormat="MMMM yyyy" FontWeight="Bold"
+                   Content="{Binding SelectedMonth}"></Label>
             <DockPanel DockPanel.Dock="Right" LastChildFill="False">
-                <Button Width="50" DockPanel.Dock="Right" Content="Prev" Command="{Binding PrevMonthCmd}"></Button>
-                <Button Margin="0,0,2,0" Width="50" DockPanel.Dock="Right" Content="Next" Command="{Binding NextMonthCmd}"></Button>
+                <Button Width="50" DockPanel.Dock="Right" Content="Prev"
+                        Command="{Binding PrevMonthCmd}"></Button>
+                <Button Margin="0,0,2,0" Width="50" DockPanel.Dock="Right" Content="Next"
+                        Command="{Binding NextMonthCmd}"></Button>
             </DockPanel>
         </DockPanel>
 
@@ -49,7 +52,8 @@
                         <Grid>
                             <interactivity:Interaction.Triggers>
                                 <interactivity:EventTrigger EventName="MouseDown">
-                                    <interactivity:InvokeCommandAction Command="{Binding ElementName=MainContainer, Path=DataContext.GotoDayCmd}" CommandParameter="{Binding Original}"/>
+                                    <interactivity:InvokeCommandAction Command="{Binding ElementName=MainContainer, Path=DataContext.GotoDayCmd}"
+                                                                       CommandParameter="{Binding Original}"/>
                                 </interactivity:EventTrigger>
                             </interactivity:Interaction.Triggers>
                             <Grid.Resources>
@@ -80,9 +84,11 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Border.Resources>
-                                <TextBlock Text="{Binding ItemsCount}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="9" FontWeight="Bold"></TextBlock>
+                                <TextBlock Text="{Binding ItemsCount}"
+                                           VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="9" FontWeight="Bold"></TextBlock>
                             </Border>
-                            <Label Content="{Binding Original.Day}" ContentStringFormat="dd" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
+                            <Label Content="{Binding Original.Day}"
+                                   ContentStringFormat="dd" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
                         </Grid>
                     </Border>
                 </DataTemplate>

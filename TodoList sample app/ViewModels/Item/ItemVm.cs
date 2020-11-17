@@ -11,12 +11,15 @@ namespace TodoList_sample_app.ViewModels {
         TodoItem item;
         IItemsRepository itemsRepo;
         ILifetimeScope scope;
+        bool isReadOnly = true;
 
         public ItemVm(TodoItem item, IItemsRepository itemsRepo, ILifetimeScope scope) {
             original = item.ShallowCopy();
             this.item = item;
             this.itemsRepo = itemsRepo;
             this.scope = scope;
+
+            isReadOnly = true;
 
             SaveCmd = new DelegateCommand(Save, CanSave);
             DeleteCmd = new DelegateCommand(Delete, CanDelete);
@@ -55,11 +58,21 @@ namespace TodoList_sample_app.ViewModels {
             }
         }
 
+        public bool IsReadOnly {
+            get {
+                return isReadOnly;
+            } set {
+                isReadOnly = value;
+                OnPropertyChanged();
+            }
+        }
+
         public DelegateCommand SaveCmd { get; }
         public DelegateCommand DeleteCmd { get; }
 
         protected async override Task LoadAction() {
             Item = await itemsRepo.Refresh(item);
+            IsReadOnly = DateTime.Now.Date != item.Day.Day;
             SaveCmd.RaiseCanExecuteChanged();
             DeleteCmd.RaiseCanExecuteChanged();
         }
