@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Prism.Commands;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace TodoList_sample_app.ViewModels {
             this.scope = scope;
             this.notificationDaemon = notificationDaemon;
 
-            GotoDayCmd = new DelegateCommand<TodoDay>(GoToDay, x => true);
+            GotoDayCmd = new DelegateCommand<TodoDay>(GoToDay, CanGoToDay);
             GotoCalendarCmd = new DelegateCommand<TodoDay>(GoToCalendar, x => true);
             GotoItemCmd = new DelegateCommand<TodoItem>(GoToItem, x => true);
         }
@@ -37,7 +38,7 @@ namespace TodoList_sample_app.ViewModels {
             }
         }
 
-        public ICommand GotoDayCmd { get; }
+        public DelegateCommand<TodoDay> GotoDayCmd { get; }
         public ICommand GotoCalendarCmd { get; }
         public ICommand GotoItemCmd { get; }
         public ICommand CloseNotifCmd { get; }
@@ -58,7 +59,19 @@ namespace TodoList_sample_app.ViewModels {
         }
 
         public void GoToDay(TodoDay day) {
+            if (!CanGoToDay(day))
+                return;
+
             CurrentVm = scope.Resolve<IDayVm>(new TypedParameter(typeof(TodoDay), day));
+        }
+
+        public void GotoDayCanExecuteChanged() {
+            GotoDayCmd.RaiseCanExecuteChanged();
+        }
+
+        bool CanGoToDay(TodoDay day) {
+            return day?.Day >= new DateTime(2020, 1, 1) &&
+                day?.Day <= new DateTime(2029, 12, 31);
         }
 
         void GoToCalendar(TodoDay day) {

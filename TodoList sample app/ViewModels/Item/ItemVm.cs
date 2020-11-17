@@ -78,6 +78,7 @@ namespace TodoList_sample_app.ViewModels {
             IsReadOnly = DateTime.Now.Date != item.Day.Day;
             SaveCmd.RaiseCanExecuteChanged();
             DeleteCmd.RaiseCanExecuteChanged();
+            scope.Resolve<IMainVm>().GotoDayCanExecuteChanged();
         }
 
         async void Save() {
