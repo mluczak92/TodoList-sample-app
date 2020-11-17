@@ -16,9 +16,9 @@
             <Label DockPanel.Dock="Left" ContentStringFormat="MMMM yyyy" FontWeight="Bold"
                    Content="{Binding SelectedMonth}"></Label>
             <DockPanel DockPanel.Dock="Right" LastChildFill="False">
-                <Button Width="50" DockPanel.Dock="Right" Content="Down"
+                <Button Width="50" DockPanel.Dock="Right" Content="Prev"
                         Command="{Binding PrevMonthCmd}"></Button>
-                <Button Margin="0,0,2,0" Width="50" DockPanel.Dock="Right" Content="Up"
+                <Button Margin="0,0,2,0" Width="50" DockPanel.Dock="Right" Content="Next"
                         Command="{Binding NextMonthCmd}"></Button>
             </DockPanel>
         </DockPanel>
