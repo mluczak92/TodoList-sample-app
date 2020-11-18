@@ -1,4 +1,5 @@
 ﻿using Autofac.Extras.Moq;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Moq;
 using System.Threading.Tasks;
@@ -15,7 +16,9 @@ namespace TodoList_sample_app_tests.Models.Database {
             using AutoMock mock = AutoMock.GetLoose();
             mock.Mock<IMigrateAsyncWrapper>()
                 .Setup(x => x.MigrateAsync(It.IsAny<DatabaseFacade>()))
-                .Throws(new SqlExceptionBuilder().WithErrorNumber(sqlExceptionNumber).Build());
+                .Throws(new SqlExceptionBuilder()
+                    .WithErrorNumber(sqlExceptionNumber)
+                    .Build());
             DatabaseMigrator migrator = mock.Create<DatabaseMigrator>();
 
             await Assert.ThrowsAsync<ServerConnectionException>(() => migrator.EnsureMigrated());
@@ -28,20 +31,12 @@ namespace TodoList_sample_app_tests.Models.Database {
             using AutoMock mock = AutoMock.GetLoose();
             mock.Mock<IMigrateAsyncWrapper>()
                 .Setup(x => x.MigrateAsync(It.IsAny<DatabaseFacade>()))
-                .Throws(new SqlExceptionBuilder().WithErrorNumber(sqlExceptionNumber).Build());
+                .Throws(new SqlExceptionBuilder()
+                    .WithErrorNumber(sqlExceptionNumber)
+                    .Build());
             DatabaseMigrator migrator = mock.Create<DatabaseMigrator>();
 
             await Assert.ThrowsAsync<MigrationException>(() => migrator.EnsureMigrated());
-        }
-
-        [Fact]
-        public void ShouldNotFetch() {
-
-        }
-
-        [Fact]
-        public void ShouldFetch() {
-
         }
     }
 }

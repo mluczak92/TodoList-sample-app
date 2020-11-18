@@ -14,6 +14,10 @@ namespace TodoList_sample_app.Models.Database {
             this.conString = conString;
         }
 
+        public TodoContext(DbContextOptions options) : base(options) {
+
+        }
+
         public DbSet<TodoDay> Days { get; set; }
         public DbSet<TodoItem> Items { get; set; }
 
