@@ -20,8 +20,7 @@ namespace TodoList_sample_app.Models.Database {
             if (obj == null)
                 return false;
 
-            TodoItem itemObj = obj as TodoItem;
-            if (itemObj == null)
+            if (!(obj is TodoItem itemObj))
                 return false;
             else
                 return Equals(itemObj);

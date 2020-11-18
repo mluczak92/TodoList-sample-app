@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 namespace TodoList_sample_app.Models.Database {
-    class TodoContext : DbContext {
+    public class TodoContext : DbContext {
         string conString;
 
 #if DEBUG //constructor used to create migrations in dev env;

@@ -54,6 +54,8 @@ namespace TodoList_sample_app {
             builder.RegisterType<ItemVm>().As<IItemVm>();
             builder.RegisterType<NotificationsVm>().As<INotificationsVm>();
 
+            builder.RegisterType<MigrateAsyncTestable>().As<IMigrateAsyncWrapper>();
+
             container = builder.Build();
         }
 

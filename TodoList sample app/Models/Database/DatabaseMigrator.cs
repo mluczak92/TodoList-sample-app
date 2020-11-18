@@ -5,27 +5,29 @@ using System;
 using System.Threading.Tasks;
 
 namespace TodoList_sample_app.Models.Database {
-    abstract class DatabaseException : Exception {
+    public abstract class DatabaseException : Exception {
         public DatabaseException(string msg, Exception innerEx) : base(msg, innerEx) { }
     }
 
-    class ServerConnectionException : DatabaseException {
+    public class ServerConnectionException : DatabaseException {
         public ServerConnectionException(Exception innerEx, string conString) :
             base($"Cannot connect to database server using connection string: \"{conString}\".\n\n" +
                 $"You can provide another connection string by passing it as application argument.", innerEx) { }
     }
 
-    class MigrationException : DatabaseException {
+    public class MigrationException : DatabaseException {
         public MigrationException(Exception innerEx, string conString)
             : base($"Cannot apply migrations using connection string: \"{conString}\".\n\n" +
                   $"You can provide another connection string by passing it as application argument.", innerEx) { }
     }
 
-    class DatabaseMigrator : IDatabaseMigrator {
+    public class DatabaseMigrator : IDatabaseMigrator {
         ILifetimeScope scope;
+        IMigrateAsyncWrapper migrateAsyncWrapper;
 
-        public DatabaseMigrator(ILifetimeScope scope) {
+        public DatabaseMigrator(ILifetimeScope scope, IMigrateAsyncWrapper migrateAsyncWrapper) {
             this.scope = scope;
+            this.migrateAsyncWrapper = migrateAsyncWrapper;
         }
 
         async public Task EnsureMigrated() {
@@ -37,12 +39,12 @@ namespace TodoList_sample_app.Models.Database {
 
         async Task CheckSchema(TodoContext context) {
             try {
-                await context.Database.MigrateAsync();
+                await migrateAsyncWrapper.MigrateAsync(context.Database);
             } catch (SqlException ex) when (ex.Number == -1 || ex.Number == 2 || ex.Number == 53) {
                 // 20.11.14: https://docs.microsoft.com/en-us/previous-versions/sql/sql-server-2008-r2/cc645611(v=sql.105)
-                throw new ServerConnectionException(ex, context.Database.GetDbConnection().ConnectionString);
+                throw new ServerConnectionException(ex, context.Database?.GetDbConnection()?.ConnectionString);
             } catch (SqlException ex) {
-                throw new MigrationException(ex, context.Database.GetDbConnection().ConnectionString);
+                throw new MigrationException(ex, context.Database?.GetDbConnection()?.ConnectionString);
             }
         }
 
