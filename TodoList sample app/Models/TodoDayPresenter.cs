@@ -3,7 +3,7 @@ using System.Linq;
 using TodoList_sample_app.Models.Database;
 
 namespace TodoList_sample_app.Models {
-    class TodoDayPresenter {
+    public class TodoDayPresenter {
         TodoDay wrapped;
         int selectedMonth;
 

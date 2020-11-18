@@ -18,7 +18,7 @@ namespace TodoList_sample_app_tests.Models {
         [InlineData(2020, 10, 3, 1)]
         [InlineData(2020, 11, 6, 6)]
         [InlineData(2020, 12, 1, 3)]
-        [InlineData(2021, 2, 7, 7)]
+        [InlineData(2021, 2, 7, 7)] //most specific case, should add whole week before and after selected month
         public void ShouldAddDaysBeforeAndAfterMonth(int year, int month,
             int daysBefore, int daysAfter) {
             DatesBoundriesSelector selector = new DatesBoundriesSelector();
