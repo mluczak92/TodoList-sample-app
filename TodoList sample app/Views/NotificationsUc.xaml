@@ -41,7 +41,7 @@
         </ItemsControl.ItemTemplate>
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <UniformGrid Columns="1" Rows="4" />
+                <UniformGrid Columns="1" Rows="6" />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
     </ItemsControl>
