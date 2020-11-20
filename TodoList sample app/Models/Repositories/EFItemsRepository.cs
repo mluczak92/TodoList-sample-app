@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using TodoList_sample_app.Models.Database;
 
 namespace TodoList_sample_app.Models {
-    class EFItemsRepository : IItemsRepository {
+    public class EFItemsRepository : IItemsRepository {
         ILifetimeScope scope;
 
         public EFItemsRepository(ILifetimeScope scope) {

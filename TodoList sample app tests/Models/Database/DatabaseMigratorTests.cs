@@ -1,5 +1,4 @@
 ﻿using Autofac.Extras.Moq;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Moq;
 using System.Threading.Tasks;

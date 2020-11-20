@@ -9,7 +9,7 @@ using TodoList_sample_app.Models;
 using TodoList_sample_app.Models.Database;
 
 namespace TodoList_sample_app.ViewModels {
-    class MainVm : AAsyncLoadVm, IMainVm, INotifsReceiver, INotifyPropertyChanged {
+    public class MainVm : AAsyncLoadVm, IMainVm, INotifsReceiver, INotifyPropertyChanged {
         IDatabaseMigrator migrator;
         ILifetimeScope scope;
         INotifsSenderDaemon notificationDaemon;
@@ -43,7 +43,7 @@ namespace TodoList_sample_app.ViewModels {
         public ICommand GotoItemCmd { get; }
         public ICommand CloseNotifCmd { get; }
 
-        protected async override Task LoadAction() {
+        public async override Task LoadAction() {
             await migrator.EnsureMigrated();
             CurrentVm = scope.Resolve<ICalendarVm>();
             await notificationDaemon.Start();

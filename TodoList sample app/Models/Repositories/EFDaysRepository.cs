@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using TodoList_sample_app.Models.Database;
 
 namespace TodoList_sample_app.Models {
-    class EFDaysRepository : IDaysRepository {
+    public class EFDaysRepository : IDaysRepository {
         ILifetimeScope scope;
 
         public EFDaysRepository(ILifetimeScope scope) {

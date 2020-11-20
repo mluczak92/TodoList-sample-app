@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using TodoList_sample_app.Models.Database;
 
 namespace TodoList_sample_app.Models {
-    interface IItemsRepository {
+    public interface IItemsRepository {
         Task<IEnumerable<TodoItem>> GetOrderedItems(Expression<Func<TodoItem, bool>> condition);
         Task<TodoItem> Refresh(TodoItem item);
         Task Add(TodoItem item);

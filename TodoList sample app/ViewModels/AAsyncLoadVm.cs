@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace TodoList_sample_app.ViewModels {
-    abstract class AAsyncLoadVm : ANotifyPropChanged {
+    public abstract class AAsyncLoadVm : ANotifyPropChanged {
         bool initStarted;
 
         public AAsyncLoadVm() {
@@ -19,7 +19,7 @@ namespace TodoList_sample_app.ViewModels {
             await LoadAction();
         }
 
-        protected abstract Task LoadAction();
+        public abstract Task LoadAction();
 
         public ICommand LoadedCbCmd { get; }
     }

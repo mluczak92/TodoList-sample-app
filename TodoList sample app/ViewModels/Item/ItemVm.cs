@@ -73,7 +73,7 @@ namespace TodoList_sample_app.ViewModels {
         public DelegateCommand SaveCmd { get; }
         public DelegateCommand DeleteCmd { get; }
 
-        protected async override Task LoadAction() {
+        public async override Task LoadAction() {
             Item = await itemsRepo.Refresh(item);
             IsReadOnly = DateTime.Now.Date != item.Day.Day;
             SaveCmd.RaiseCanExecuteChanged();

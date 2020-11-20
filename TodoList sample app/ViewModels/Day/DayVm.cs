@@ -8,7 +8,7 @@ using TodoList_sample_app.Models;
 using TodoList_sample_app.Models.Database;
 
 namespace TodoList_sample_app.ViewModels {
-    class DayVm : AAsyncLoadVm, IDayVm {
+    public class DayVm : AAsyncLoadVm, IDayVm {
         IItemsRepository itemsRepo;
         TodoDay day;
         ILifetimeScope scope;
@@ -37,7 +37,7 @@ namespace TodoList_sample_app.ViewModels {
 
         public ICommand NewTaskCmd { get; }
 
-        protected async override Task LoadAction() {
+        public async override Task LoadAction() {
             Items = await itemsRepo.GetOrderedItems(x => x.Day == day);
         }
 
