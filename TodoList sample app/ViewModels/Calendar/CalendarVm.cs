@@ -56,7 +56,7 @@ namespace TodoList_sample_app.ViewModels {
         public DelegateCommand NextMonthCmd { get; }
         public DelegateCommand PrevMonthCmd { get; }
 
-        public async override Task LoadAction() {
+        protected async override Task LoadAction() {
             boundriesSelector.Select(selectedMonth.Year, selectedMonth.Month,
                 out DateTime min, out DateTime max);
 

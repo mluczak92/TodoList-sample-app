@@ -3,23 +3,28 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace TodoList_sample_app.ViewModels {
-    public abstract class AAsyncLoadVm : ANotifyPropChanged {
-        bool initStarted;
+    public interface IAsyncLoadVm {
+        public bool LoadingStarted { get; }
+        public ICommand LoadedCbCmd { get; }
+    }
 
+    public abstract class AAsyncLoadVm : ANotifyPropChanged, IAsyncLoadVm {
         public AAsyncLoadVm() {
-            LoadedCbCmd = new DelegateCommand(Load, () => !initStarted);
+            LoadedCbCmd = new DelegateCommand(LoadAsync, () => !LoadingStarted);
         }
 
-        async void Load() {
-            if (initStarted) {
+        public bool LoadingStarted { get; private set; }
+
+        async void LoadAsync() {
+            if (LoadingStarted) {
                 return;
             }
 
-            initStarted = true;
+            LoadingStarted = true;
             await LoadAction();
         }
 
-        public abstract Task LoadAction();
+        protected abstract Task LoadAction();
 
         public ICommand LoadedCbCmd { get; }
     }

@@ -10,20 +10,19 @@ using TodoList_sample_app.Models.Database;
 namespace TodoList_sample_app.ViewModels {
     public class DayVm : AAsyncLoadVm, IDayVm {
         IItemsRepository itemsRepo;
-        TodoDay day;
         ILifetimeScope scope;
 
         IEnumerable<TodoItem> items;
 
         public DayVm(IItemsRepository itemsRepo, TodoDay day, ILifetimeScope scope) {
             this.itemsRepo = itemsRepo;
-            this.day = day;
+            Day = day;
             this.scope = scope;
 
             NewTaskCmd = new DelegateCommand(NewTask, CanAddNew);
         }
 
-        public TodoDay Day => day;
+        public TodoDay Day { get; }
 
         public IEnumerable<TodoItem> Items {
             get {
@@ -37,8 +36,8 @@ namespace TodoList_sample_app.ViewModels {
 
         public ICommand NewTaskCmd { get; }
 
-        public async override Task LoadAction() {
-            Items = await itemsRepo.GetOrderedItems(x => x.Day == day);
+        protected async override Task LoadAction() {
+            Items = await itemsRepo.GetOrderedItems(x => x.Day == Day);
         }
 
         async void NewTask() {
@@ -46,11 +45,11 @@ namespace TodoList_sample_app.ViewModels {
                 return;
             }
 
-            DateTime selectedDate = day.Day;
+            DateTime selectedDate = Day.Day;
             TimeSpan now = TimeSpan.FromMinutes((int)DateTime.Now.TimeOfDay.TotalMinutes);
 
             TodoItem item = new TodoItem() {
-                DayId = day.Id,
+                DayId = Day.Id,
                 Time = now.Add(TimeSpan.FromMinutes(60)),
                 ReminderTime = selectedDate.Add(now.Add(TimeSpan.FromMinutes(30))),
                 Note = "new task"
@@ -61,7 +60,7 @@ namespace TodoList_sample_app.ViewModels {
         }
 
         bool CanAddNew() {
-            return day.Day.Date >= DateTime.Now.Date;
+            return Day.Day.Date >= DateTime.Now.Date;
         }
     }
 }
