@@ -6,11 +6,11 @@ namespace TodoList_sample_app_tests.ViewModels {
     public class AAsyncLoadVmTests {
         class ConcreteAsyncLoadVm : AAsyncLoadVm {
             protected override Task LoadAction() {
-                LoadActionExecuted = true;
+                ExecutedTimes++;
                 return Task.FromResult<object>(null);
             }
 
-            public bool LoadActionExecuted { get; private set; }
+            public int ExecutedTimes { get; private set; }
         }
 
         [Fact]
@@ -25,8 +25,19 @@ namespace TodoList_sample_app_tests.ViewModels {
             ConcreteAsyncLoadVm vm = new ConcreteAsyncLoadVm();
 
             vm.LoadedCbCmd.Execute(null);
+
             Assert.True(vm.LoadingStarted);
-            Assert.True(vm.LoadActionExecuted);
+            Assert.Equal(1, vm.ExecutedTimes);
+        }
+
+        [Fact]
+        public void SingleLoad() {
+            ConcreteAsyncLoadVm vm = new ConcreteAsyncLoadVm();
+
+            vm.LoadedCbCmd.Execute(null);
+            vm.LoadedCbCmd.Execute(null);
+
+            Assert.Equal(1, vm.ExecutedTimes);
         }
     }
 }
