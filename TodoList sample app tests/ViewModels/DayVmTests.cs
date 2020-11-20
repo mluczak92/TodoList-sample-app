@@ -75,7 +75,7 @@ namespace TodoList_sample_app_tests.ViewModels {
         }
 
         [Fact]
-        public async Task LoadAction() {
+        public void LoadAction() {
             using AutoMock mock = AutoMock.GetLoose();
             IEnumerable<TodoItem> items = Enumerable.Repeat(new TodoItem(), 5);
             mock.Mock<IItemsRepository>()
@@ -83,7 +83,7 @@ namespace TodoList_sample_app_tests.ViewModels {
                 .Returns(Task.FromResult(items));
             DayVm vm = mock.Create<DayVm>();
 
-            await vm.LoadAction();
+            vm.LoadedCbCmd.Execute(null);
 
             Assert.Same(items, vm.Items);
         }
