@@ -91,10 +91,6 @@ namespace TodoList_sample_app_tests.ViewModels {
         [Fact]
         public void DayProperty() {
             using AutoMock mock = AutoMock.GetLoose();
-            IEnumerable<TodoItem> items = Enumerable.Repeat(new TodoItem(), 5);
-            mock.Mock<IItemsRepository>()
-                .Setup(x => x.GetOrderedItems(It.IsAny<Expression<Func<TodoItem, bool>>>()))
-                .Returns(Task.FromResult(items));
             TodoDay day = new TodoDay() {
                 Day = DateTime.Now
             };
