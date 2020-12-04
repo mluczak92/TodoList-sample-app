@@ -75,7 +75,7 @@ namespace TodoList_sample_app.ViewModels {
 
         protected async override Task LoadAction() {
             Item = await itemsRepo.Refresh(item);
-            IsReadOnly = DateTime.Now.Date != item.Day.Day;
+            IsReadOnly = DateTime.Now.Date > item.Day.Day;
             SaveCmd.RaiseCanExecuteChanged();
             DeleteCmd.RaiseCanExecuteChanged();
             scope.Resolve<IMainVm>().GotoDayCanExecuteChanged();
