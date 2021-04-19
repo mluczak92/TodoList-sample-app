@@ -73,16 +73,16 @@ namespace TodoList_sample_app.Models.Database {
                 TimeSpan now = TimeSpan.FromMinutes((int)DateTime.Now.TimeOfDay.TotalMinutes);
 
                 day.Items.Add(new TodoItem() {
-                    Time = now.Add(TimeSpan.FromMinutes(60)),
-                    ReminderTime = today.Add(now.Add(TimeSpan.FromMinutes(30))),
+                    Time = now.Add(TimeSpan.FromMinutes(45)),
+                    ReminderTime = today.Add(now.Add(TimeSpan.FromMinutes(15))),
                     Note = "This is your first task note for today!\n\n" +
                     "" +
                     "You can click on it and change its content or planned time."
                 });
 
                 day.Items.Add(new TodoItem() {
-                    Time = now.Add(TimeSpan.FromMinutes(120)),
-                    ReminderTime = today.Add(now.Add(TimeSpan.FromMinutes(90))),
+                    Time = now.Add(TimeSpan.FromMinutes(60)),
+                    ReminderTime = today.Add(now.Add(TimeSpan.FromMinutes(30))),
                     Note = "You can also create a new note or move back to the calendar page, using buttons in the right top corner of this view."
                 });
             }
